@@ -1,6 +1,8 @@
 package TrivaGameServer;
 
+import java.util.List;
+
 public interface TrivaDataAccessInterface 
 {
-	void loadData();
+	List<Problem> loadData();
 }

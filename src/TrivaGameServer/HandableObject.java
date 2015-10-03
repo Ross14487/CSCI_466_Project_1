@@ -1,8 +1,7 @@
 package TrivaGameServer;
+import java.net.InetAddress;
 
-import java.net.DatagramPacket;
-
-public interface HandableObject
+public interface HandableObject 
 {
-	void handler(DatagramPacket packet);
+	public void handler(InetAddress addr, byte[] msg);
 }
