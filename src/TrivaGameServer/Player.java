@@ -1,3 +1,5 @@
+package TrivaGameServer;
+
 /*************************************************************************
  * Name        :  Ross Mitchell 
  * email       :  RPMitchell@mtech.edu
