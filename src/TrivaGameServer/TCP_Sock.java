@@ -9,6 +9,7 @@ public class TCP_Sock implements NetworkInterface, Runnable
 	private int port;
 	private int timeout = 0;
 	private boolean server;
+	private volatile boolean run;
 	private ServerSocket srvSocket;
 	private Socket clientSocket;
 	private Exception lastException;
