@@ -26,8 +26,8 @@ public class Problem
     private Random generator;
     int randomIndex;
     
-    List<Answer> selectableAnswers=new ArrayList<Answer>();
-    List<Answer> inOrderSelectableAnswers =new ArrayList<Answer>();
+    List<Answer> selectableAnswers = new ArrayList<Answer>();
+    List<Answer> inOrderSelectableAnswers = new ArrayList<Answer>();
     private Problem(int quesId, String[] arguments)
     {
         questionId = quesId;
