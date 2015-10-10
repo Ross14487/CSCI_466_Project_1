@@ -65,8 +65,5 @@ public class ActivePlayerList
          }
          return timedOutPlayers;
      }//findTimedOutPlayers
-     
-     String sArray[] = new String[] { "Array 1", "Array 2", "Array 3" };
-
-    
+         
 }//end ActivePlayerList

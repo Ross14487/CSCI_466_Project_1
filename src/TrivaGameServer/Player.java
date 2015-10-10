@@ -18,13 +18,13 @@ public class Player
 {
     private String name;
     private UUID playerId;
-    private byte[] address;
+    private String address;
     private int score; 
-    long playTimeStamp, currentTimeStamp, outOfTime = 180000;
+    private long playTimeStamp, currentTimeStamp, outOfTime = 180000;
  //   private Timer timeOutTimer = new Timer();
     private boolean timedOut;
     
-    public Player(String [] args, byte[] playerAddress)
+    public Player(String [] args, String playerAddress)
     {
         name = args[0];
         playerId = UUID.randomUUID();
@@ -45,7 +45,7 @@ public class Player
         return playerId;
     }//getPlayerId
     
-    public byte[] getAddress()
+    public String getAddress()
     {
         return address;
     }//getAddress
