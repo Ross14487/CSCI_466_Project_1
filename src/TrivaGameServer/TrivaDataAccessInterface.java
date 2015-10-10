@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface TrivaDataAccessInterface 
 {
-	List<Problem> loadData();
+	List<Problem> getProblems();
 }
