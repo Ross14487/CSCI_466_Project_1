@@ -28,15 +28,13 @@ public class Player
     
 
     public Player(String playerName, InetAddress playerAddress)
->>>>>>> origin/master
     {
         name = playerName;
         playerId = UUID.randomUUID();
         address = playerAddress;
         score = 0;
         playTimeStamp = System.currentTimeMillis();
-        timedOut = false;
-           
+        timedOut = false;  
     }//constructor
     
     public String getName()
