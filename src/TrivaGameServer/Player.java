@@ -1,5 +1,7 @@
 package TrivaGameServer;
 
+import java.net.InetAddress;
+
 /*************************************************************************
  * Name        :  Ross Mitchell 
  * email       :  RPMitchell@mtech.edu
@@ -18,15 +20,17 @@ public class Player
 {
     private String name;
     private UUID playerId;
-    private String address;
+    private InetAddress address;
     private int score; 
     private long playTimeStamp, currentTimeStamp, outOfTime = 180000;
  //   private Timer timeOutTimer = new Timer();
     private boolean timedOut;
     
-    Player(String [] args, String playerAddress)
+
+    public Player(String playerName, InetAddress playerAddress)
+>>>>>>> origin/master
     {
-        name = args[0];
+        name = playerName;
         playerId = UUID.randomUUID();
         address = playerAddress;
         score = 0;
@@ -45,7 +49,7 @@ public class Player
         return playerId;
     }//getPlayerId
     
-    public String getAddress()
+    public InetAddress getAddress()
     {
         return address;
     }//getAddress

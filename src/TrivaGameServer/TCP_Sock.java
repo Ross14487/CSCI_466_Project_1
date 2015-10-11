@@ -1,18 +1,24 @@
 package TrivaGameServer;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public class TCP_Sock implements NetworkInterface, Runnable 
 {
 	private int port;
-	private int timeout = 0;
 	private boolean server;
-	private volatile boolean run;
 	private ServerSocket srvSocket;
 	private Socket clientSocket;
 	private Exception lastException;
+    private HandableObject handler;
+    private Thread rcvThread;
+	
+	private volatile boolean rx = false;
+	private int timeout = 0;
 	
 	public TCP_Sock(int port, boolean server) throws IOException
 	{
@@ -21,8 +27,8 @@ public class TCP_Sock implements NetworkInterface, Runnable
 		
 		if(server)
 			srvSocket = new ServerSocket(port);
-		else
-			clientSocket = new Socket();
+		
+		clientSocket = new Socket();
 	}
 	
 	public TCP_Sock(int port, int timeout, boolean server) throws IOException
@@ -32,8 +38,8 @@ public class TCP_Sock implements NetworkInterface, Runnable
 		
 		if(server)
 			srvSocket.setSoTimeout(timeout);
-		else
-			clientSocket.setSoTimeout(timeout);
+
+		clientSocket.setSoTimeout(timeout);
 	}
 	
 	public TCP_Sock(Object socket)
@@ -49,8 +55,7 @@ public class TCP_Sock implements NetworkInterface, Runnable
 	@Override
 	public void run() 
 	{
-		// TODO Auto-generated method stub
-
+		receive(handler);
 	}
 
 	@Override
@@ -64,8 +69,11 @@ public class TCP_Sock implements NetworkInterface, Runnable
 	{
 		try
 		{
-			if(clientSocket != null && clientSocket.isClosed())
-				clientSocket = new Socket(addr,port);
+			if(clientSocket.isClosed())
+			{
+				clientSocket = new Socket(addr, port);
+				clientSocket.setSoTimeout(timeout);
+			}
 		}
 		catch (IOException e)
 		{
@@ -102,36 +110,182 @@ public class TCP_Sock implements NetworkInterface, Runnable
 	@Override
 	public boolean send(byte[] msg) 
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if(clientSocket != null && !clientSocket.isClosed())
+		{
+			try 
+			{
+				send(msg, clientSocket);
+			} 
+			catch (IOException e) 
+			{
+				lastException = e;
+				e.printStackTrace();
+				return false;
+			}
+		}
+		else
+		{
+			lastException = new IOException("Client connection is not open");
+			return false;
+		}
+		
+		return true;
 	}
 
 	@Override
 	public boolean send(byte[] msg, String ip) 
 	{
-		// TODO Auto-generated method stub
-		return false;
+		try 
+		{
+			// open a new socket
+			Socket tmpClient = new Socket(ip, port);
+			
+			// send the message
+			send(msg, tmpClient);
+			
+			// close the socket
+			tmpClient.close();
+		} 
+		catch (IOException e) {
+			lastException = e;
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+		return true;
 	}
 
 	@Override
 	public boolean startReceive(HandableObject handler) 
 	{
-		// TODO Auto-generated method stub
-		return false;
+		rx = true;
+	   	this.handler = handler;
+	   	 
+	   	if(rcvThread == null || !rcvThread.isAlive())
+	   	{
+		    	rcvThread = new Thread(this);					// create the new thread
+		    	rcvThread.start();								// start the new thread
+	   	}
+	   	else
+	   		return false;	// Thread already runnung
+   	 
+	   	return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean stopReceive() 
 	{
-		// TODO Auto-generated method stub
-		return false;
+		rx = false;
+	   	if(rcvThread != null)
+	   	{
+	   		try 
+	   		{
+	   			// close the open socket
+	   			close();
+	   			// wait x2 the time out for the thread to exit gracefully
+				Thread.sleep(srvSocket.getSoTimeout()*2);
+					
+				// if the thread fails to exit assume failure and force exit
+				if(rcvThread.isAlive())
+				{
+					// worse case kill the thread
+					rcvThread.stop();
+						
+					// if the thread is still alive return false
+					if(rcvThread.isAlive())
+						return false;
+				}
+					
+				} 
+	   		catch (IOException | InterruptedException e) 
+	   		{
+				lastException = e;
+				return false; // general error
+			} 
+	   	}
+	   	return true;
 	}
 
 	@Override
 	public byte[] receive() 
 	{
-		// TODO Auto-generated method stub
+		try 
+		{
+			return receive(clientSocket);
+		} 
+		catch (IOException e) 
+		{
+			lastException = e;
+			e.printStackTrace();
+		}
+		
 		return null;
+	}
+	
+	protected void receive(HandableObject handler)
+    {
+	   	if(server)
+	   		serverReceive(handler);
+	   	else
+	   		clientReceive(handler);
+    }
+	
+	private void send(byte[] msg, Socket sct) throws IOException
+	{
+		// create a new buffered output stream then write the msg
+		BufferedOutputStream output = new BufferedOutputStream(sct.getOutputStream());
+		output.write(msg);
+	}
+	
+	private byte[] receive(Socket sct) throws IOException, SocketTimeoutException
+	{
+		byte[] msg = new byte[1024];
+		BufferedInputStream input = new BufferedInputStream(sct.getInputStream());
+		
+		input.read(msg);
+		
+		return msg;
+	}
+	
+	private void serverReceive(HandableObject handler)
+	{
+	   	while(rx && srvSocket != null && !srvSocket.isClosed())
+	   	{
+	   		try 
+	   		{
+	   			clientSocket = srvSocket.accept();
+	   			clientSocket.setSoTimeout(timeout);
+	   			
+	   			clientReceive(handler);
+	   		} 
+	   		catch (SocketTimeoutException  e)
+	   		{}
+	   		catch (IOException e) 
+	   		{
+				lastException = e;
+	   		}
+	   	}
+	}
+	
+	private void clientReceive(HandableObject handler)
+	{
+		byte[] msg;
+		while(rx && !clientSocket.isClosed())
+		{
+			try 
+			{
+				msg = receive(clientSocket);
+				handler.handler(clientSocket.getInetAddress(), msg);
+			} 
+			catch (SocketTimeoutException  e)
+	   		{}
+	   		catch (IOException e) 
+	   		{
+				lastException = e;
+	   		}
+		}
 	}
 
 }
