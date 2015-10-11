@@ -22,7 +22,7 @@ public class UDP_Sock implements NetworkInterface, Runnable {
  		lastException = null;
  	}
      
-     public UDP_Sock(int port)
+     public UDP_Sock(int port, boolean multicast)
      {
     	 prt = port;
     	 rx = false;
@@ -30,31 +30,29 @@ public class UDP_Sock implements NetworkInterface, Runnable {
 
     	 try 
     	 {
-    		 sct = new DatagramSocket(port);
+    		 sct = multicast ? new MulticastSocket(port) : new DatagramSocket(port);
     		 sct.setSoTimeout(1000);
     		 sct.setBroadcast(true);
     	 } 
     	 catch (SocketException e) 
     	 {
 			lastException = e;
+    	 } 
+    	 catch (IOException e) 
+    	 {
+    		lastException = e;
     	 }
      }
-     public UDP_Sock(int port, int timeout)
-     {
-    	 prt = port;
-    	 rx = false;
-    	 defaultAddr = "255.255.255.255";
+     public UDP_Sock(int port, int timeout, boolean multicast)
+     {    	 
+    	 this(port, multicast);
     	 
     	 try 
     	 {
-    		 sct = new DatagramSocket(port);
-    		 sct.setSoTimeout(timeout);
-    		 sct.setBroadcast(true);
+			sct.setSoTimeout(timeout);
     	 } 
     	 catch (SocketException e) 
-    	 {
-			lastException = e;
-    	 }
+    	 {}	// would have been caught above already if setSoTimeout threw an exception so just ignore this one
      }
      public UDP_Sock(DatagramSocket socket)
      {
@@ -67,13 +65,43 @@ public class UDP_Sock implements NetworkInterface, Runnable {
      public void close()
      {
     	 if(sct != null)
+    	 {
+    		 // if multicast leave the group before closing
+    		 if(sct instanceof MulticastSocket && !defaultAddr.equals("255.255.255.255"))
+    		 {
+    			 try
+    			 {
+    				 ((MulticastSocket)sct).leaveGroup(InetAddress.getByName(defaultAddr));
+    			 }
+    			 catch(IOException e)
+    			 {
+    				 lastException = e;
+    			 }
+    		 }
     		 sct.close();
+    	 }
      }
      
  	public boolean connect(String addr) 
  	{
- 		defaultAddr = addr;
- 		return true;
+ 		if(sct instanceof MulticastSocket)
+ 		{
+ 			try 
+ 			{
+ 				// check if the socket is already with a group and if it is leave it
+ 				if(!defaultAddr.equals("255.255.255.255"))
+ 					((MulticastSocket)sct).leaveGroup(InetAddress.getByName(defaultAddr));
+ 				
+ 				defaultAddr = addr;
+				((MulticastSocket)sct).joinGroup(InetAddress.getByName(addr));
+				return true;
+			} 
+ 			catch (IOException e) {
+ 				lastException = e;
+				e.printStackTrace();
+			}
+ 		}
+ 		return false;
  	}
  	
      public boolean send(byte[] msg)
