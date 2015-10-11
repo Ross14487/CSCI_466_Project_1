@@ -24,7 +24,7 @@ public class Player
  //   private Timer timeOutTimer = new Timer();
     private boolean timedOut;
     
-    public Player(String [] args, String playerAddress)
+    Player(String [] args, String playerAddress)
     {
         name = args[0];
         playerId = UUID.randomUUID();

@@ -29,7 +29,7 @@ public class Problem
     
     List<Answer> selectableAnswers = new ArrayList<Answer>();
     List<Answer> inOrderSelectableAnswers = new ArrayList<Answer>();
-    private Problem(int quesId, String[] arguments)
+    Problem(int quesId, String[] arguments)
     {
         questionId = quesId;
         subject = arguments[0];

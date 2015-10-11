@@ -16,7 +16,7 @@ public class Answer
 {
     private UUID answerId;
     private String answer;
-    public Answer(String ans)
+    Answer(String ans)
     {
         answer = ans;
         answerId = UUID.randomUUID();        
