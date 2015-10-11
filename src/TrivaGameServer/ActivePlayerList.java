@@ -12,18 +12,23 @@ package TrivaGameServer;
  *************************************************************************/
 //import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 //import java.util.UUID;
 
 
 public class ActivePlayerList
 {
-    List<Player> activePlayers = new ArrayList<Player>();
-    List<Player> timedOutPlayers = new ArrayList<Player>();
-    boolean registrationIsOpen = false;
+	private int gamePort;
+	private InetAddress groupAddr;
+    private List<Player> activePlayers = new ArrayList<Player>();
+    private List<Player> timedOutPlayers = new ArrayList<Player>();
+    private boolean registrationIsOpen = false;
 
     
-    ActivePlayerList()
+    public ActivePlayerList()
     {
        
     }//constructor
@@ -43,14 +48,18 @@ public class ActivePlayerList
        return registrationIsOpen; 
     }//isRegistrationOpen
     
-    public boolean addPlayer(Player player)
+    public UUID addPlayer(Player player)
     {
-        return (activePlayers.add(player));    
+    	if(activePlayers.add(player))
+    		return player.getPlayerId();
+    	else
+    		return null;
     }//addPlayer
     
-    public boolean removePlayer(Player player)
+    public boolean removePlayer(UUID playerId)
     {
-        return (activePlayers.remove(player));
+    	Player player = findPlayer(playerId);
+        return player != null ? activePlayers.remove(player) : false;
     }//removePlayer
      
     public List<Player> findTimedOutPlayers(int timedOut)
@@ -65,5 +74,35 @@ public class ActivePlayerList
          }
          return timedOutPlayers;
      }//findTimedOutPlayers
+    
+    public void setPort(int port)
+    {
+    	gamePort = port;
+    }
+    
+    public void setGroupAddr(String address) throws UnknownHostException
+    {
+    	groupAddr = InetAddress.getByName(address);
+    }
+    
+    public int getGamePort()
+    {
+    	return gamePort;
+    }
+    
+    public InetAddress getGroupAddress()
+    {
+    	return groupAddr;
+    }
+    
+    private Player findPlayer(UUID id)
+    {
+    	for(Player player : activePlayers)
+    	{
+    		if(id.equals(id))
+    			return player;
+    	}
+    	return null;	// player not found
+    }
          
 }//end ActivePlayerList
