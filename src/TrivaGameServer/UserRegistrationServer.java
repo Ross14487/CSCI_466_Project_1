@@ -8,17 +8,17 @@ import java.util.UUID;
 
 public class UserRegistrationServer implements HandableObject 
 {
-	private ActivePlayerList playerList;
+	private volatile ActivePlayerList playerList;
 	private NetworkInterface socket;
 	private static UserRegistrationServer instance;
 	
-	private UserRegistrationServer(NetworkInterface socket,ActivePlayerList playerList)
+	private UserRegistrationServer(NetworkInterface socket, ActivePlayerList playerList)
 	{
 		this.socket = socket;
 		this.playerList = playerList;
 	}
 	
-	static synchronized UserRegistrationServer createInstance(NetworkInterface socket,ActivePlayerList playerList)
+	public static synchronized UserRegistrationServer createInstance(NetworkInterface socket,ActivePlayerList playerList)
 	{
 		if(instance == null)
 			instance = new UserRegistrationServer(socket, playerList);
@@ -26,9 +26,19 @@ public class UserRegistrationServer implements HandableObject
 		return instance;
 	}
 	
-	static UserRegistrationServer getInstance()
+	public static UserRegistrationServer getInstance()
 	{
 		return instance;
+	}
+	
+	public boolean startServer()
+	{
+		return socket.startReceive(this);
+	}
+	
+	public boolean stopServer()
+	{
+		return socket.stopReceive();
 	}
 
 	@Override

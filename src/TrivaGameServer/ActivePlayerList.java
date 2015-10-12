@@ -33,6 +33,56 @@ public class ActivePlayerList
        
     }//constructor
     
+    private ActivePlayerList(ActivePlayerList playerList)
+    {
+    	this.gamePort = playerList.gamePort;
+    	this.groupAddr = playerList.groupAddr;
+    	this.registrationIsOpen = playerList.registrationIsOpen;
+    	this.activePlayers.addAll(playerList.activePlayers);
+    	this.timedOutPlayers.addAll(playerList.timedOutPlayers);
+    }
+    
+    public ActivePlayerList clone()
+    {
+    	return new ActivePlayerList(this);	
+    }
+    
+    public void clearList()
+    {
+    	gamePort = 0;
+    	groupAddr = null;
+    	activePlayers = new ArrayList<Player>();
+    	timedOutPlayers = new ArrayList<Player>();
+    	registrationIsOpen = false;
+    }
+    
+    public void clearReceived()
+    {
+    	for(Player player : activePlayers)
+    		player.setReceived(false);
+    }
+    
+    public void setPlayerReceived(UUID id, boolean received)
+    {
+    	findPlayer(id).setReceived(received);
+    }
+    
+    public boolean didPlayerReceive(UUID id)
+    {
+    	return findPlayer(id).getReceived();
+    }
+    
+    public boolean didAllPlayersReceive()
+    {
+    	for(Player player : activePlayers)
+    	{
+    		if(!player.getReceived())
+    			return false;
+    	}
+    	
+    	return true;
+    }
+    
     public void closeRegistration()
     {
         registrationIsOpen = false;
@@ -93,6 +143,22 @@ public class ActivePlayerList
     public InetAddress getGroupAddress()
     {
     	return groupAddr;
+    }
+    
+    public boolean allPlayersReady()
+    {
+    	for(Player player : activePlayers)
+    	{
+    		if(!player.isReady())
+    			return false;
+    	}
+    	return true;
+    }
+    
+    public void playerReady(UUID id, boolean ready)
+    {
+    	Player player = findPlayer(id);
+    	player.setReady(ready);
     }
     
     private Player findPlayer(UUID id)

@@ -26,7 +26,7 @@ public class CSVAccess implements TrivaDataAccessInterface
 	private CSVAccess()
 	{}
 	
-	static CSVAccess getInstance()
+    public static CSVAccess getInstance()
 	{
 		return instance;
 	}
@@ -36,7 +36,7 @@ public class CSVAccess implements TrivaDataAccessInterface
 //	    this.problem = problemInput;
 //	}
 	@SuppressWarnings("null")
-    static boolean loadFile(String fileName)
+    public static boolean loadFile(String fileName)
 	{
 	    boolean success = false;
         String[] theRestOfLine = null; 

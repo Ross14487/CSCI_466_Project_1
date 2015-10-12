@@ -25,6 +25,8 @@ public class Player
     private long playTimeStamp, currentTimeStamp, outOfTime = 180000;
  //   private Timer timeOutTimer = new Timer();
     private boolean timedOut;
+    private boolean ready;
+    private boolean received;
     
 
     public Player(String playerName, InetAddress playerAddress)
@@ -35,7 +37,28 @@ public class Player
         score = 0;
         playTimeStamp = System.currentTimeMillis();
         timedOut = false;  
+        ready = false;
     }//constructor
+    
+    public void setReceived(boolean received)
+    {
+    	this.received = received;
+    }
+    
+    public boolean getReceived()
+    {
+    	return received;
+    }
+    
+    public void setReady(boolean ready)
+    {
+    	this.ready = ready;
+    }
+    
+    public boolean isReady()
+    {
+    	return ready;
+    }
     
     public String getName()
     {
