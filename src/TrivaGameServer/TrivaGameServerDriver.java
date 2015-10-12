@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public class TrivaGameServerDriver 
 {
-	static final int userRegPort = 5000;
-	static final int gamePort = 5500;
+	static final int userRegPort = 3025;
+	static final int gamePort = 3030;
 	static final int maxGames = 10;
 	static final int userRegTimeout = 10000;
 	static final String csvFile = "TrivaCSV.csv";
