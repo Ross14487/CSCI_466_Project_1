@@ -14,19 +14,27 @@ public class TrivaGameServerDriver
 	{
 		// create the servers
 		NetworkInterface userRegSocket;
+		NetworkInterface gameSocket;
 		try 
 		{
+			System.out.println("Starting Server...");
+			System.out.println("Loading CSV...");
 			CSVAccess.loadFile(csvFile);	// load the csv files
+			System.out.printf("Opening TCP Socket on port %d...\n", userRegPort);
 			userRegSocket = new TCP_Sock(userRegPort, userRegTimeout, true);
-			NetworkInterface gameSocket = new UDP_Sock(gamePort, false);
+			System.out.printf("Opening UDP Socket on port %d...\n", gamePort);
+			gameSocket = new UDP_Sock(gamePort, false);
+			System.out.println("Creating Lobby...");
 			ActivePlayerList lobby = new ActivePlayerList();
 			UserRegistrationServer userRegServer = UserRegistrationServer.createInstance(userRegSocket, lobby);
 			TrivaGameServer gameServer = TrivaGameServer.createInstance(maxGames, gameSocket, lobby, CSVAccess.getInstance(), gamePort);
 			
+			System.out.println("Starting user registration server...");
 			// start the user reg server
 			if(!userRegServer.startServer())
 				throw new Exception("User registration server failed to start");
-				
+			
+			System.out.println("Starting game server...");
 			// start the game server
 			gameServer.startServer();
 		} 

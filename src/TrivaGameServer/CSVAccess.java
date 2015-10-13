@@ -38,21 +38,17 @@ public class CSVAccess implements TrivaDataAccessInterface
 	@SuppressWarnings("null")
     public static boolean loadFile(String fileName)
 	{
+		int probNum = 1;
 	    boolean success = false;
-        String[] theRestOfLine = null; 
 		try
 		{
 
 		    for (String line:Files.readAllLines(Paths.get(fileName), Charset.defaultCharset()))
 		    {
-		        String arr[] = line.split(",");
-		        String firstWord = arr[0]; 
-		        int probNum = Integer.parseInt(firstWord);
-		        for (int i = 1; i < arr.length; i ++) 
-		        {
-		            theRestOfLine[i] = arr[i];
-		        }
-		        Problem problem = new Problem(probNum, theRestOfLine);   
+		    	if(line.contains("<header>"))
+		    		continue;
+
+		        Problem problem = new Problem(probNum++, line.split(","));   
 		        problems.add(problem);
 		    }
 		    success = true;
