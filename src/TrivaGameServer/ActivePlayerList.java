@@ -147,6 +147,9 @@ public class ActivePlayerList
     
     public boolean allPlayersReady()
     {
+    	if(activePlayers.isEmpty())
+    		return false;
+    	
     	for(Player player : activePlayers)
     	{
     		if(!player.isReady())
