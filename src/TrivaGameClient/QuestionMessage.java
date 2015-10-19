@@ -1,6 +1,7 @@
 package TrivaGameClient;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public class QuestionMessage implements Message
 	
 	public QuestionMessage(byte[] rawMsg)
 	{
-		String[] csv = new String(Arrays.copyOfRange(rawMsg, 69, rawMsg.length)).split("|");
+		String[] csv = new String(Arrays.copyOfRange(rawMsg, 69, rawMsg.length), StandardCharsets.UTF_8).split("|");
 		ByteBuffer buffer = ByteBuffer.wrap(rawMsg, 1, rawMsg.length);
 		questionId = buffer.getInt();
 		
@@ -35,6 +36,7 @@ public class QuestionMessage implements Message
 	
 	public QuestionMessage(int opcode, int questionId, UUID[] answerIds, String category, String question, String difficulty, String[] answers)
 	{
+	    String strMsg = "";
 		String[] csv = new String[7];
 		ByteBuffer buffer = ByteBuffer.wrap(new byte[69]);
 		
@@ -61,6 +63,14 @@ public class QuestionMessage implements Message
 			csv[x+2] = answers[x];
 		
 		csv[6] = difficulty;
+		
+		strMsg = String.join("|", csv);
+		
+		rawMsg = new byte[buffer.array().length + strMsg.length()];
+		ByteBuffer msgBuffer = ByteBuffer.wrap(rawMsg);
+		
+		msgBuffer.put(buffer.array());
+		msgBuffer.put(strMsg.getBytes(StandardCharsets.UTF_8));
 	}
 	
 	public int getQuestionId()

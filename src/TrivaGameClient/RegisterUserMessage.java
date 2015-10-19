@@ -15,6 +15,20 @@ public class RegisterUserMessage implements Message
 		userName = new String(Arrays.copyOfRange(rawMsg, 1, rawMsg.length), StandardCharsets.UTF_8);
 	}
 	
+	public RegisterUserMessage(int opcode, String userName)
+	{
+	    int x = 1;
+	    byte[] msg = new byte[1+userName.length()];
+	    this.userName = userName;
+	    
+	    msg[0] = (byte) opcode;
+	    
+	    for(byte chr : userName.getBytes(StandardCharsets.UTF_8))
+	        msg[x++] = chr;
+	    
+	    this.rawMsg = msg;
+	}
+	
 	public String getUserName()
 	{
 		return userName;
