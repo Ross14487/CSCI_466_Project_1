@@ -1,3 +1,5 @@
+package TrivaGameClient;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,7 +60,7 @@ public class InitialDisplay {
 		registered = new JLabel("You are not registered.");
 		register = new JButton("Register");
 		ready = new JButton("Ready to Start Game");
-		readyNWaiting = new JLabel("Not ready.");
+		readyNWaiting = new JLabel("");
 		JLabel emptySpace = new JLabel("-------------------------------------");
 
 
@@ -118,7 +120,18 @@ public class InitialDisplay {
 		frame.setVisible(true);
 
 	}//go()
-
+	
+	private void updateName()
+	{
+		nameStr = enterYourName.getText();
+		yourName.setText("Your name: "+nameStr);
+	}
+	
+	private void updateIp()
+	{
+		serverIPStr = enterServerIP.getText();
+		serverIP.setText("Server's IP: "+serverIPStr);
+	}
 	
 
 	//Get the player's name, as they entered it
@@ -152,8 +165,7 @@ public class InitialDisplay {
 	class nameListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			nameStr = enterYourName.getText();
-			yourName.setText("Your name: "+nameStr);
+			updateName();
 
 		}//actionPerformed
 	}//FieldListener
@@ -162,8 +174,7 @@ public class InitialDisplay {
 	class serverIPListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			serverIPStr = enterServerIP.getText();
-			serverIP.setText("Server's IP: "+serverIPStr);
+			updateIp();
 
 		}//actionPerformed
 	}//FieldListener
@@ -176,11 +187,19 @@ public class InitialDisplay {
 				isRegistered = false;
 				register.setText("Register");
 				registered.setText("You are deregistered.");
+				
+				/*** add deregister code here ***/
+				
 			}//if isRegistered already
 			else{
 				isRegistered = true;
 				register.setText("Deregister");
 				registered.setText("You are registered.");
+				updateName();
+				updateIp();
+				
+				/*** add register code here ***/
+				
 			}//else
 		}//actionPerformed
 	}//FieldListener
@@ -189,8 +208,23 @@ public class InitialDisplay {
 	class readyListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			isReady = true;
-			readyNWaiting.setText("Your game will begin shortly.");
+			
+			if(!isReady)
+			{
+				isReady = true;
+				readyNWaiting.setText("Your game will begin shortly.");
+				ready.setText("Not Ready");
+				
+				/*** add ready code here ***/
+			}
+			else
+			{
+				isReady = false;
+				readyNWaiting.setText("");
+				ready.setText("Ready");
+				
+				/*** add not ready code here ***/
+			}
 
 		}//actionPerformed
 	}//FieldListener
