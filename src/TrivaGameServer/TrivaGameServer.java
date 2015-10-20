@@ -113,7 +113,7 @@ public class TrivaGameServer extends Observable implements HandableObject
 			stopServer();	// kill the server
 		try 
 		{
-			message = new TrivaMessage(addr, msg, false);
+			message = new TrivaMessage(addr, msg);
 			
 			// let the observers know new data is available
 			setChanged();
@@ -183,7 +183,7 @@ public class TrivaGameServer extends Observable implements HandableObject
 		{
 			TrivaMessage msg = msgQueue.poll();
 			// send the first message
-			socket.send(msg.message, msg.addr.getHostAddress());
+			socket.send(msg.message.getMessage(), msg.addr.getHostAddress());
 		}
 	}
 }

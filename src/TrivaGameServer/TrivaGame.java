@@ -2,34 +2,34 @@ package TrivaGameServer;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
-import java.util.Random;
 import java.util.UUID;
+
+import TrivaGameClient.Message;
+import TrivaGameClient.OpcodeOnlyMessage;
+import TrivaGameClient.QuestionMessage;
+import TrivaGameClient.AnswerMessage;
+import TrivaGameClient.BasicUserMessage;
+import TrivaGameClient.BuzzerQueryMessage;
+import TrivaGameClient.CorrectAnswerMessage;
 
 public class TrivaGame implements Observer, Runnable 
 {
 	private Problem currentProblem;
 	private TrivaGameServer server;
 	private ActivePlayerList playerList;
-	private List<Problem> questions;
 	private InetAddress groupIp;
 	private boolean nextQuestion = true;
 	private volatile boolean run = true;
 	private Queue<TrivaMessage> msgQueue = new LinkedList<TrivaMessage>();
-	private Random randomGenerator = new Random();
-	
 	public TrivaGame(TrivaGameServer server, ActivePlayerList playerList, List<Problem> questions)
 	{
 		this.server = server;
 		this.playerList = playerList;
-		this.questions = questions;
 		this.groupIp = playerList.getGroupAddress();
 	}
 
@@ -40,7 +40,7 @@ public class TrivaGame implements Observer, Runnable
 		{
 			TrivaGameServer caller = (TrivaGameServer)arg0;
 			// check if the server is still running
-			if(caller.isRunning())
+			if(caller.isRunning() && caller.getMessage().addr.equals(groupIp))
 				msgQueue.add(caller.getMessage());	// must be a message so added it to the message queue
 			
 			else
@@ -53,7 +53,7 @@ public class TrivaGame implements Observer, Runnable
 	{
 		while(run)
 		{
-			byte[] msg;
+			Message msg;
 			TrivaMessage receivedMessage;
 			playerList.clearReceived();
 			// sleep for a sec
@@ -64,22 +64,20 @@ public class TrivaGame implements Observer, Runnable
 				{
 					nextQuestion = false;
 					msg = createQuestionPacket();
-					server.queueMessage(new TrivaMessage(groupIp, msg, true));
+					server.queueMessage(new TrivaMessage(groupIp, msg));
 					
 					while(!confirmReceived((byte)0x00, 5000))
-						server.queueMessage(new TrivaMessage(groupIp, msg, true));	// try again if it failed
+						server.queueMessage(new TrivaMessage(groupIp, msg));	// try again if it failed
 				}
 				
 				unlockScreen(5000);
 				
 				// look for the buzzer
-				if((receivedMessage = processQueuedMessage()) != null && receivedMessage.opcode == 0x01)
+				if((receivedMessage = processQueuedMessage()) != null && receivedMessage.message.getOpcode() == 0x01)
 				{
 					// buzzer was pressed start the answer sequence
 					// order a freeze
-					msg = new byte[1];
-					msg[0] = (byte)0x01;
-					server.queueMessage(new TrivaMessage(groupIp, msg, true));
+					server.queueMessage(new TrivaMessage(groupIp, new OpcodeOnlyMessage(0x01)));
 					
 					checkBuzzer(5000);
 				}
@@ -100,13 +98,13 @@ public class TrivaGame implements Observer, Runnable
 		// unlock the players screen
 		byte[] msg = new byte[1];
 		msg[0] = (byte)0x05;
-		server.queueMessage(new TrivaMessage(groupIp, msg, true));
+		server.queueMessage(new TrivaMessage(groupIp, new OpcodeOnlyMessage(0x05)));
 		
 		playerList.clearReceived();
 		
 		//confirm with request
 		while(!confirmReceived((byte)0x05, timeToWait))
-			server.queueMessage(new TrivaMessage(groupIp, msg, true));	// try again if it failed
+			server.queueMessage(new TrivaMessage(groupIp, new OpcodeOnlyMessage(0x05)));	// try again if it failed
 		
 		playerList.clearReceived();
 	}
@@ -115,23 +113,23 @@ public class TrivaGame implements Observer, Runnable
 	{
 		UUID player = null;
 		TrivaMessage msg;
-		int timeStamp = -1;
+		long timeStamp = -1;
 		long maxWait = System.currentTimeMillis() + timeToWait;
 		byte[] rawMsg = new byte[1];
 		rawMsg[0] = (byte)0x02;
 		
-		server.queueMessage(new TrivaMessage(groupIp, rawMsg, true));
+		server.queueMessage(new TrivaMessage(groupIp, new OpcodeOnlyMessage(0x02)));
 		
 		while(maxWait > System.currentTimeMillis() || !msgQueue.isEmpty())
 		{
 			// found a response
-			if((msg = processQueuedMessage()) != null && msg.opcode == 0x02)
+			if((msg = processQueuedMessage()) != null && msg.message.getOpcode() == 0x02)
 			{
-				int userTimeStamp = ByteBuffer.wrap(msg.message).getInt();
+				long userTimeStamp = ((BuzzerQueryMessage) msg.message).getTimeStamp();
 				if(userTimeStamp > timeStamp)
 				{
 					timeStamp = userTimeStamp;
-					player = msg.userID;
+					player = ((BuzzerQueryMessage) msg.message).getPlayerId();
 				}
 			}
 		}
@@ -144,29 +142,23 @@ public class TrivaGame implements Observer, Runnable
 	{
 		TrivaMessage msg;
 		UUID answer;
-		ByteBuffer rawMsg = ByteBuffer.wrap(new byte[17]);
 		long maxWait = System.currentTimeMillis() + timeToWait;
 		
 		if(userId == null)
 			return;
 		
-		rawMsg.put((byte)0x03);
-		rawMsg.putLong(userId.getMostSignificantBits());
-		rawMsg.putLong(userId.getLeastSignificantBits());
-		
 		while(maxWait > System.currentTimeMillis() || !msgQueue.isEmpty())
 		{
 			// found a response
-			if((msg = processQueuedMessage()) != null && msg.opcode == 0x03)
+			if((msg = processQueuedMessage()) != null && msg.message.getOpcode() == 0x03)
 			{
-				rawMsg = ByteBuffer.wrap(msg.message);
-				answer = new UUID(rawMsg.getLong(), rawMsg.getLong());
+				answer = ((AnswerMessage) msg.message).getAnswerId();
 				
 				// check the answer
 				if(answer.equals(currentProblem.getAnswer()))
 				{
 					nextQuestion = true;	// move on to the next question
-					givePoints(timeToWait, userId, rawMsg.getInt());
+					givePoints(timeToWait, userId, ((AnswerMessage) msg.message).getTimeElapsed());
 				}
 				else
 					givePoints(timeToWait, userId, -1);	// wrong answer
@@ -177,7 +169,6 @@ public class TrivaGame implements Observer, Runnable
 	
 	private void givePoints(long timeToWait, UUID userId, int timeElapsed) throws UnknownHostException, InterruptedException
 	{
-		ByteBuffer rawMsg = ByteBuffer.wrap(new byte[21]);
 		int pointsReceived = 0;
 		if(timeElapsed <= -1); //wrong answer
 		else if(timeElapsed < 6)
@@ -191,18 +182,12 @@ public class TrivaGame implements Observer, Runnable
 		else
 			pointsReceived = 1;
 		
-		// build the packet
-		rawMsg.put((byte)0x04);
-		rawMsg.putLong(userId.getMostSignificantBits());
-		rawMsg.putLong(userId.getLeastSignificantBits());
-		rawMsg.putInt(pointsReceived);
-		
-		server.queueMessage(new TrivaMessage(groupIp, rawMsg.array(), true));
+		server.queueMessage(new TrivaMessage(groupIp, new CorrectAnswerMessage(0x04, userId, pointsReceived)));
 		playerList.clearReceived();
 		
 		//confirm 
 		while(!confirmReceived((byte)0x04, 5000))
-			server.queueMessage(new TrivaMessage(groupIp, rawMsg.array(), true));	// try again if it failed
+			server.queueMessage(new TrivaMessage(groupIp, new CorrectAnswerMessage(0x04, userId, pointsReceived)));	// try again if it failed
 		
 		playerList.clearReceived();
 	}
@@ -222,8 +207,8 @@ public class TrivaGame implements Observer, Runnable
 			while((msg = processQueuedMessage()) != null)
 			{
 				// check if the message is the code we are looking for
-				if(msg.opcode == opcode)
-					playerList.setPlayerReceived(msg.userID, true);
+				if(msg.message.getOpcode() == opcode)
+					playerList.setPlayerReceived(((BasicUserMessage) msg.message).getPlayerId(), true);
 				
 			}
 			
@@ -253,51 +238,20 @@ public class TrivaGame implements Observer, Runnable
 		return msg.groupIp.equals(groupIp);
 	}
 	
-	private byte[] createQuestionPacket()
+	private Message createQuestionPacket()
 	{
-		byte[] rawPacket;
-		ByteBuffer buffer;
-		List<String> csv = new ArrayList<String>();
-		// get a random question from the list
-		currentProblem = questions.get(randomGenerator.nextInt(questions.size()));
+		int cnt = 0;
+		String[] answers = new String[4];
+		UUID[] answerIds = new UUID[4];
 		
-		// populate some of the CSV to be sent
-		csv.add(currentProblem.getQuestion());
-		csv.add(currentProblem.getSubject());
-		csv.add(currentProblem.getLevel());
-		
-		// create a random question packet
-		List<Byte> packet = new ArrayList<Byte>();
-		packet.add((byte)0x00);
-
-		// add the question ID
-		buffer = ByteBuffer.allocate(4).putInt(currentProblem.getQuestionId());
-		for(byte b : buffer.array())
-			packet.add(b);
-		
-		// add the answers UUID
-		for(Answer a : currentProblem.getAnswers())
+		for(Answer ans : currentProblem.getAnswers())
 		{
-			csv.add(a.getAnswer());
-			buffer = ByteBuffer.allocate(16);
-			buffer.putLong(a.getAnswerId().getMostSignificantBits());
-			buffer.putLong(a.getAnswerId().getLeastSignificantBits());
-			
-			for(byte b : buffer.array())
-				packet.add(b);
+			answers[cnt] = ans.getAnswer();
+			answerIds[cnt++] = ans.getAnswerId();
 		}
 		
-		// create the csv and store it in the packet
-		for(byte letter : String.join(",", csv).getBytes(StandardCharsets.UTF_8))
-			packet.add(letter);
-		
-		// create the raw array
-		int index = 0;
-		rawPacket = new byte[packet.size()];
-		for(byte b : packet)
-			rawPacket[index++] = b;
-		
-		return rawPacket;
+		return new QuestionMessage(0x00, currentProblem.getQuestionId(), answerIds, 
+				currentProblem.getSubject(), currentProblem.getQuestion(), currentProblem.getLevel(), answers);
 	}
 	
 	private int getPointMultiplier(String level)
