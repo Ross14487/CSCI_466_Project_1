@@ -44,7 +44,7 @@ public class TriviaGame extends Observable implements Runnable, Observer
         elapsedTime = buzzerTime - unlockTime;
     }
     
-    private void submitAnswer()
+    private void submitAnswer(UUID answerID)
     {
         setBuzzerTime();
         if (buzzerTime <= allowedTime)
@@ -62,7 +62,7 @@ public class TriviaGame extends Observable implements Runnable, Observer
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        chosenAnswerId = answerId;
+        chosenAnswerId = answerID;
     }
     
     public int getBuzzerTime()
