@@ -1,7 +1,7 @@
 package TrivaGameServer;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -69,11 +69,11 @@ public class TCP_Sock implements NetworkInterface, Runnable
 	{
 		try
 		{
-			if(clientSocket.isClosed())
-			{
-				clientSocket = new Socket(addr, port);
-				clientSocket.setSoTimeout(timeout);
-			}
+			if(!clientSocket.isClosed())
+				clientSocket.close();
+			
+			clientSocket = new Socket(addr, port);
+			clientSocket.setSoTimeout(timeout);
 		}
 		catch (IOException e)
 		{
@@ -235,14 +235,14 @@ public class TCP_Sock implements NetworkInterface, Runnable
 	private void send(byte[] msg, Socket sct) throws IOException
 	{
 		// create a new buffered output stream then write the msg
-		BufferedOutputStream output = new BufferedOutputStream(sct.getOutputStream());
-		output.write(msg);
+		DataOutputStream output = new DataOutputStream(sct.getOutputStream());
+		output.write(msg, 0, msg.length);
 	}
 	
 	private byte[] receive(Socket sct) throws IOException, SocketTimeoutException
 	{
 		byte[] msg = new byte[1024];
-		BufferedInputStream input = new BufferedInputStream(sct.getInputStream());
+		DataInputStream input = new DataInputStream(sct.getInputStream());
 		
 		input.read(msg);
 		
