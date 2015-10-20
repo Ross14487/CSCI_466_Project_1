@@ -21,7 +21,7 @@ public class RegistrationSystem
     public RegistrationSystem(ServiceInterface service)
     {
        this.service = service;
-    }//RegistrationSystem
+    }//Constructor
     
     private Message RegisterUser(String userName) throws UnknownHostException, IllegalArgumentException
     {
