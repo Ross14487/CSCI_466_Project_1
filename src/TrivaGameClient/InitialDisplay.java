@@ -29,19 +29,19 @@ import javax.swing.*;
  */
 public class InitialDisplay {
 
-	String nameStr;
-	String serverIPStr;
-	boolean isRegistered;
-	boolean isReady;
+	private String nameStr = "";
+	private String serverIPStr = "";
+	private boolean isRegistered = false;
+	private boolean isReady = false;
 
-	JLabel yourName;
-	JTextField enterYourName;
-	JLabel serverIP;
-	JTextField enterServerIP;
-	JLabel registered;
-	JButton register;
-	JButton ready;
-	JLabel readyNWaiting;
+	private JLabel yourName;
+	private JTextField enterYourName;
+	private JLabel serverIP;
+	private JTextField enterServerIP;
+	private JLabel registered;
+	private JButton register;
+	private JButton ready;
+	private JLabel readyNWaiting;
 
 	//go() method for the class; creates the GUI with components, registers the components with their listeners
 	public void go()
@@ -121,18 +121,22 @@ public class InitialDisplay {
 
 	
 
+	//Get the player's name, as they entered it
 	public String getPlayerName(){
 		return nameStr;
 	}//getPlayerName
 	
+	//Get the server's IP, as the user entered it
 	public String getServerIP(){
 		return serverIPStr;
 	}//getServerIP
 	
+	//Gets whether the user has CLICKED register button
 	public boolean getIsRegistered(){
 		return isRegistered;
 	}//getIsRegistered
 	
+	//Get whether the user has clicked Ready button
 	public boolean getIsReady(){
 		return isReady;
 	}//getIsReady

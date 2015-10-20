@@ -26,23 +26,23 @@ import javax.swing.*;
  */
 public class GamePlayDisplay {
 
-	boolean buzzed;
-	int answerChosen;
-	boolean quit;
+	private boolean buzzed = false;
+	private int answerChosen = 0;
+	private boolean quit = false;
 
-	JFrame frame;
-	JLabel yourName;
-	JLabel score;
-	JLabel timer;
-	JTextArea opponentsText;
-	JButton quitButton;
-	JTextArea topicText;
-	JTextArea questionText;
-	JButton BUZZ;
-	JButton ans1;
-	JButton ans2;
-	JButton ans3;
-	JButton ans4;
+	private JFrame frame;
+	private JLabel yourName;
+	private JLabel score;
+	private JLabel timer;
+	private JTextArea opponentsText;
+	private JButton quitButton;
+	private JTextArea topicText;
+	private JTextArea questionText;
+	private JButton BUZZ;
+	private JButton ans1;
+	private JButton ans2;
+	private JButton ans3;
+	private JButton ans4;
 
 	//go() method for the class; creates the GUI with components, registers the components with their listeners
 	public void go()
@@ -154,45 +154,56 @@ public class GamePlayDisplay {
 
 	}//go()
 
+	//Get whether the user has buzzed in
 	public boolean getBuzzed(){
 		return buzzed;
 	}//getBuzzed
 
+	//Get which answer the user has chosen, starts at 0
 	public int getAnswerChosen(){
 		return answerChosen;
 	}//getAnswerChosen
 
+	//Get whether user wants to quit
 	public boolean getQuit(){
 		return quit;
 	}//getQuit
 
+	//Update the name for this player, starts as ""
 	public void updateName(String newName){
 		yourName.setText("Player: " + newName + "    ");
 	}//updateName
 
+	//Update the score displayed for this player
 	public void updateScore(int newScore){
 		score.setText("Score: "+newScore+"    ");
 	}//updateScore
 
+	//Update the time shown by the countdown timer
 	public void updateTimer(double newTimeRem){
 		timer.setText("Timer: "+newTimeRem+"    ");
 	}//updateTimer
 
+	//Update the opponents displayed by passing in an array of Playe, Score pairs
 	public void updateOpponents(String[] opponents){
+		opponentsText.setText("");
 		for(int i = 0; i < opponents.length; i++){
 			opponentsText.append(opponents[i]+"\n");
 		}//for
 	}//updateOpponents
 
+	//Update the topic displayed
 	public void updateTopic(String newTopic){
 		topicText.setText(newTopic);
 	}//updateTopic
 
+	//Update the question displayed
 	public void updateQuestion(String newQuestion, String newDifficulty){
 		questionText.setText(newQuestion);
 		questionText.append("\n\nDifficulty:" + newDifficulty);
 	}//updateQuestion
 
+	//Update the text of the answers on teh answer buttons
 	public void updateAnswers(String ans1Str, String ans2Str, String ans3Str, String ans4Str){
 		ans1.setText(ans1Str);
 		ans2.setText(ans2Str);
@@ -200,6 +211,7 @@ public class GamePlayDisplay {
 		ans4.setText(ans4Str);
 	}//updateAnswers
 
+	//Enables or disables answer buttons, based on boolean passed in
 	public void enableAnsButtons(boolean enable){
 		if(enable){
 			ans1.setEnabled(true);
@@ -215,6 +227,7 @@ public class GamePlayDisplay {
 		}//else
 	}//enableButtons
 
+	//Enables or disables the buzzer button, based on boolean passed in
 	public void enableBuzzer(boolean enable){
 		if(enable){
 			BUZZ.setEnabled(true);
