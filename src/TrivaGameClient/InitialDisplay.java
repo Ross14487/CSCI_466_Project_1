@@ -44,6 +44,15 @@ public class InitialDisplay {
 	private JButton register;
 	private JButton ready;
 	private JLabel readyNWaiting;
+	
+	private RegistrationSystem sys;
+	
+	public InitialDisplay(){}	// WILL BE REMOVED AFTER TESTING!
+	
+	public InitialDisplay(RegistrationSystem sys)
+	{
+		this.sys = sys;
+	}
 
 	//go() method for the class; creates the GUI with components, registers the components with their listeners
 	public void go()

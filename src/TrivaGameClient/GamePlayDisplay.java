@@ -45,6 +45,15 @@ public class GamePlayDisplay {
 	private JButton ans2;
 	private JButton ans3;
 	private JButton ans4;
+	
+	private TriviaGame sys;
+	
+	public GamePlayDisplay() {} // WILL BE REMOVED AFTER TESTING!
+	
+	public GamePlayDisplay(TriviaGame sys)
+	{
+		this.sys = sys;
+	}
 
 	//go() method for the class; creates the GUI with components, registers the components with their listeners
 	public void go()
