@@ -11,11 +11,12 @@ import TrivaGameServer.TrivaGameServer;
 public class TriviaGame extends Observable implements Runnable, Observer 
 {
     private ServiceInterface service;
-    private UUID playerID, correctPlayerID, answerId;
+    private UUID playerID, correctPlayerID, chosenAnswerId, answerId;
     private Observable observablePlayerID, observablePlayerScore;
     private InetAddress groupIp, addr;
-    private int portNum, buzzerTime, elapsedTime, allowedTime = 25, playerScore, correctInRow = 0;
+    private int portNum, buzzerTime, elapsedTime, unlockTime, allowedTime = 25, playerScore, correctInRow = 0;
     private TrivaGameServer server;
+    private boolean freezeFlag = false;
 
     public TriviaGame(ServiceInterface service, InetAddress groupIp, InetAddress addr, UUID playerID, int portNum, TrivaGameServer server, int playerScore)
     {
@@ -28,6 +29,11 @@ public class TriviaGame extends Observable implements Runnable, Observer
         this.playerScore = playerScore;
     }//constructor
     
+    private void setUnlockTime()
+    {
+        unlockTime = (int)System.currentTimeMillis();
+    }
+    
     private void setBuzzerTime()
     {
         buzzerTime = (int)System.currentTimeMillis();
@@ -35,7 +41,28 @@ public class TriviaGame extends Observable implements Runnable, Observer
     
     private void setElapsedTime()
     {
-        elapsedTime = (int)System.currentTimeMillis()-buzzerTime;
+        elapsedTime = buzzerTime - unlockTime;
+    }
+    
+    private void submitAnswer()
+    {
+        setBuzzerTime();
+        if (buzzerTime <= allowedTime)
+        try
+        {
+            service.sendMessage(new BasicUserMessage(0x01, playerID, groupIp));
+        }
+        catch (UnknownHostException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        chosenAnswerId = answerId;
     }
     
     public int getBuzzerTime()
@@ -93,11 +120,11 @@ public class TriviaGame extends Observable implements Runnable, Observer
                     break;
 
                 case 0x01: //Buzzer
-                    setBuzzerTime();
-                    if (buzzerTime <= allowedTime)
+                    freezeFlag = true;
+                    if (elapsedTime <= allowedTime)
                     try
                     {
-                        service.sendMessage(new BasicUserMessage(0x05, playerID, groupIp));
+                        service.sendMessage(new BasicUserMessage(0x01, playerID, groupIp));
                     }
                     catch (UnknownHostException e)
                     {
@@ -114,7 +141,7 @@ public class TriviaGame extends Observable implements Runnable, Observer
                 case 0x02: //Buzzer Query
                     try
                     {
-                        service.sendMessage(new BuzzerQueryMessage(0x02, playerID, groupIp, buzzerTime));
+                        service.sendMessage(new BuzzerQueryMessage(0x02, playerID, groupIp, elapsedTime));
                     }
                     catch (UnknownHostException e)
                     {
@@ -135,7 +162,7 @@ public class TriviaGame extends Observable implements Runnable, Observer
                         setElapsedTime();
                         try
                         {
-                            service.sendMessage(new AnswerMessage(0x03, playerID, addr, answerId, elapsedTime));
+                            service.sendMessage(new AnswerMessage(0x03, playerID, addr, chosenAnswerId, elapsedTime));
                         }
                         catch (UnknownHostException e)
                         {
@@ -158,19 +185,19 @@ public class TriviaGame extends Observable implements Runnable, Observer
                             allowedTime = allowedTime - 1;
                         if (allowedTime < 10)
                             allowedTime = 10;
-                        int maxPoints, pointsAwarded;
-                        maxPoints = ((CorrectAnswerMessage)msg).getPoints();
-                        if (getElapsedTime() <= 5)
-                            pointsAwarded = maxPoints;
-                        else if (getElapsedTime() <= 10)
-                            pointsAwarded = (int)(0.75 * maxPoints);
-                        else if (getElapsedTime() <= 15)
-                            pointsAwarded = (int)(0.5 * maxPoints);
-                        else if (getElapsedTime() <= 20)
-                            pointsAwarded = (int)(0.25 * maxPoints);
-                        else
-                            pointsAwarded = 1;
-                        setScore(pointsAwarded);
+//                        int maxPoints, pointsAwarded;
+//                        maxPoints = ((CorrectAnswerMessage)msg).getPoints();
+//                        if (getElapsedTime() <= 5)
+//                            pointsAwarded = maxPoints;
+//                        else if (getElapsedTime() <= 10)
+//                            pointsAwarded = (int)(0.75 * maxPoints);
+//                        else if (getElapsedTime() <= 15)
+//                            pointsAwarded = (int)(0.5 * maxPoints);
+//                        else if (getElapsedTime() <= 20)
+//                            pointsAwarded = (int)(0.25 * maxPoints);
+//                        else
+//                            pointsAwarded = 1;
+                        setScore (((CorrectAnswerMessage)msg).getPoints());
                     }
                     else if((((CorrectAnswerMessage)msg).getPlayerId() == playerID) && (((CorrectAnswerMessage)msg).getPoints() == 0))
                     {
@@ -203,6 +230,8 @@ public class TriviaGame extends Observable implements Runnable, Observer
                     break;
                     
                 case 0x05: //Start or Unfreeze
+                    setUnlockTime();
+                    freezeFlag = false;
                     try
                     {
                         service.sendMessage(new BasicUserMessage(0x05, playerID, groupIp));
