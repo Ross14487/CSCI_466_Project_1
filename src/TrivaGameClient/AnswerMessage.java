@@ -28,7 +28,7 @@ public class AnswerMessage extends BasicUserMessage
 		
 		buffer.putLong(answerId.getMostSignificantBits());
 		buffer.putLong(answerId.getLeastSignificantBits());
-		buffer.putLong(timeElapsed);
+		buffer.putInt(timeElapsed);
 		
 		this.rawMsg = buffer.array();
 	}
@@ -38,7 +38,7 @@ public class AnswerMessage extends BasicUserMessage
 		return answerId;
 	}
 	
-	public long getTimeElapsed()
+	public int getTimeElapsed()
 	{
 		return timeElapsed;
 	}
