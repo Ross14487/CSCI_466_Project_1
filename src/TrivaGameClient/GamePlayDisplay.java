@@ -55,6 +55,7 @@ public class GamePlayDisplay implements Observer  {
 	public GamePlayDisplay(TriviaGame sys)
 	{
 		this.sys = sys;
+		sys.addObserver(this);
 	}
 
 	//go() method for the class; creates the GUI with components, registers the components with their listeners
@@ -334,8 +335,11 @@ public class GamePlayDisplay implements Observer  {
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		if(arg0 instanceof TriviaGame)
+		{
 		/*** Add code to manipulate the interface here ***/
 		/*** Examples: load question, enable/disable interface, score update, ect ***/
+		}
 	}
 
 }//GamePlayDisplay
