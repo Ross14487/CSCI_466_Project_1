@@ -18,7 +18,8 @@ public class SocketTestHandler implements HandableObject
 	public void handler(InetAddress addr, byte[] msg) 
 	{
 		System.out.print("[" + addr.getHostAddress() + "]: ");
-		System.out.println(new String(msg));
+		//System.out.println(new String(msg));
+		System.out.println(msg[0]);
 		
 		// echo
 		socket.send(msg);		

@@ -170,6 +170,7 @@ public class TrivaGameServer extends Observable implements HandableObject
 			playerList.clearList();
 			playerList.setPort(port);
 			playerList.setGroupAddr(groupAddressPool.poll().getHostAddress());
+			playerList.openRegistration();
 		} 
 		catch (Exception e) 
 		{

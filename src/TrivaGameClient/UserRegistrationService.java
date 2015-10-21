@@ -44,7 +44,9 @@ public class UserRegistrationService implements ServiceInterface
 		if(!socket.send(msg.getMessage()))
 			return false;
 		
-		queueMessage(socket.receive());
+		// 0x03 and 0x04 do not get responses from the server so receive will just hang if this is the opcode
+		if(msg.getOpcode() != 0x03 && msg.getOpcode() != 0x04)
+			queueMessage(socket.receive());
 		
 		socket.close();
 		return true;

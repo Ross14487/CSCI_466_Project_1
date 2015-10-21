@@ -236,15 +236,17 @@ public class TCP_Sock implements NetworkInterface, Runnable
 	{
 		// create a new buffered output stream then write the msg
 		DataOutputStream output = new DataOutputStream(sct.getOutputStream());
+		output.writeInt(msg.length);
 		output.write(msg, 0, msg.length);
 	}
 	
 	private byte[] receive(Socket sct) throws IOException, SocketTimeoutException
 	{
-		byte[] msg = new byte[1024];
 		DataInputStream input = new DataInputStream(sct.getInputStream());
+		int length = input.readInt();
+		byte[] msg = new byte[length];
 		
-		input.read(msg);
+		input.readFully(msg);
 		
 		return msg;
 	}
