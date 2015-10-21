@@ -3,6 +3,9 @@ package TrivaGameClient;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.UUID;
 
 import javax.swing.*;
 
@@ -26,11 +29,12 @@ import javax.swing.*;
         Must be able to prevent input when some one buzzes in and only allow input after the Triva Game Systems says so
  *
  */
-public class GamePlayDisplay {
+public class GamePlayDisplay implements Observer  {
 
 	private boolean buzzed = false;
 	private int answerChosen = 0;
 	private boolean quit = false;
+	private UUID selectedAnswerId;
 
 	private JFrame frame;
 	private JLabel yourName;
@@ -40,12 +44,10 @@ public class GamePlayDisplay {
 	private JButton quitButton;
 	private JTextArea topicText;
 	private JTextArea questionText;
+	private ButtonGroup questionOptions;
+	private JRadioButton[] answers = new JRadioButton[4];
 	private JButton BUZZ;
-	private JButton ans1;
-	private JButton ans2;
-	private JButton ans3;
-	private JButton ans4;
-	
+
 	private TriviaGame sys;
 	
 	public GamePlayDisplay() {} // WILL BE REMOVED AFTER TESTING!
@@ -81,15 +83,27 @@ public class GamePlayDisplay {
 		questionText = new JTextArea();
 		questionText.setLineWrap(true);
 		questionText.setEnabled(false);
-		BUZZ = new JButton("BUZZ");
-		ans1 = new JButton("1) ");
-		ans2 = new JButton("2)");
-		ans3 = new JButton("3) ");
-		ans4 = new JButton("4) ");
+		BUZZ = new JButton("Submit");
 		JLabel emptySpace = new JLabel("-------------------------------------");
 		JLabel curlySpace = new JLabel("~~~~~~~~~~~~");
 		JLabel curlySpace2 = new JLabel("~~~~~~~~~~~~");
-
+		
+		answers[0] = new JRadioButton("1)");
+		answers[1] = new JRadioButton("2)");
+		answers[2] = new JRadioButton("3)");
+		answers[3] = new JRadioButton("4)");
+		answers[0].setActionCommand("0");
+		answers[1].setActionCommand("1");
+		answers[2].setActionCommand("2");
+		answers[3].setActionCommand("3");
+		questionOptions = new ButtonGroup();
+		
+		// add the radio buttions to the group
+		for(JRadioButton btn : answers)
+		{
+			btn.addActionListener(new answerSlectedListener());
+			questionOptions.add(btn);
+		}
 
 
 		//Panels for the display
@@ -137,20 +151,16 @@ public class GamePlayDisplay {
 		smallQuestionPanel.add(question);
 		smallQuestionPanel.add(questionText);
 		questionPanel.add(curlySpace2);
+		
+		for(JRadioButton btn : answers)
+			questionPanel.add(btn);
+		
+		questionPanel.add(emptySpace);
 		questionPanel.add(smallBUZZPanel);
 		smallBUZZPanel.add(BorderLayout.CENTER, BUZZ);
-		questionPanel.add(emptySpace);
-		questionPanel.add(ans1);
-		questionPanel.add(ans2);
-		questionPanel.add(ans3);
-		questionPanel.add(ans4);
 
 		//Registering the components with their listeners
 		BUZZ.addActionListener(new BUZZListener());
-		ans1.addActionListener(new ans1Listener());
-		ans2.addActionListener(new ans2Listener());
-		ans3.addActionListener(new ans3Listener());
-		ans4.addActionListener(new ans4Listener());
 		quitButton.addActionListener(new quitListener());
 
 		//TODO find how to disable this
@@ -164,6 +174,10 @@ public class GamePlayDisplay {
 		frame.setVisible(true);
 
 	}//go()
+	
+	public UUID getSelectedAnswerId(){
+		return selectedAnswerId;
+	}
 
 	//Get whether the user has buzzed in
 	public boolean getBuzzed(){
@@ -215,26 +229,21 @@ public class GamePlayDisplay {
 	}//updateQuestion
 
 	//Update the text of the answers on teh answer buttons
-	public void updateAnswers(String ans1Str, String ans2Str, String ans3Str, String ans4Str){
-		ans1.setText(ans1Str);
-		ans2.setText(ans2Str);
-		ans3.setText(ans3Str);
-		ans4.setText(ans4Str);
+	public void updateAnswers(String[] answers){
+		int x = 0;
+		for(JRadioButton btn : this.answers)
+			btn.setText(answers[x++]);
 	}//updateAnswers
 
 	//Enables or disables answer buttons, based on boolean passed in
 	public void enableAnsButtons(boolean enable){
 		if(enable){
-			ans1.setEnabled(true);
-			ans2.setEnabled(true);
-			ans3.setEnabled(true);
-			ans4.setEnabled(true);
+			for(JRadioButton btn : answers)
+				btn.setEnabled(true);
 		}//if enable
 		else{
-			ans1.setEnabled(false);
-			ans2.setEnabled(false);
-			ans3.setEnabled(false);
-			ans4.setEnabled(false);
+			for(JRadioButton btn : answers)
+				btn.setEnabled(false);
 		}//else
 	}//enableButtons
 
@@ -248,7 +257,6 @@ public class GamePlayDisplay {
 		}//else
 	}//enableBuzzer
 
-
 	/**
 	 * 
 	 * Listeners
@@ -261,49 +269,11 @@ public class GamePlayDisplay {
 		public void actionPerformed(ActionEvent arg0) {
 			buzzed = true;
 			enableBuzzer(false);
+			
+			/*** Add buzzer/submit answer logic here ***/
 
 		}//actionPerformed
 	}//FieldListener
-
-	//Respond to ans1 button
-	class ans1Listener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			answerChosen = 1;
-			enableAnsButtons(false);
-
-		}//actionPerformed
-	}//ans1Listener
-
-	//Respond to ans2 button
-	class ans2Listener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			answerChosen = 2;
-			enableAnsButtons(false);
-
-		}//actionPerformed
-	}//ans1Listener
-
-	//Respond to ans3 button
-	class ans3Listener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			answerChosen = 3;
-			enableAnsButtons(false);
-
-		}//actionPerformed
-	}//ans1Listener
-
-	//Respond to ans4 button
-	class ans4Listener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			answerChosen = 4;
-			enableAnsButtons(false);
-
-		}//actionPerformed
-	}//ans1Listener
 
 	//Respond to quit button
 	class quitListener implements ActionListener{
@@ -314,6 +284,14 @@ public class GamePlayDisplay {
 
 		}//actionPerformed
 	}//quitListener
+	
+	class answerSlectedListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			/*** add setting the answer UUID to send here ***/			
+		}
+		
+	}
 
 
 	/**
@@ -333,10 +311,7 @@ public class GamePlayDisplay {
 		String topicStr = "All the things\n";
 		String questionStr = "What are all the things in the world, huh? What? What? What?....What?\n";
 		String difficultyStr = "Expert (5 points)";
-		String ans1Str = "For reals, like what?";
-		String ans2Str = "All the things are everything.";
-		String ans3Str = "Winning isn't everything. It's all the things.";
-		String ans4Str = "Things da best. Da best!";
+		String[] ansStr = { "For reals, like what?", "All the things are everything.", "Winning isn't everything. It's all the things.", "Things da best. Da best!"};
 
 
 		GamePlayDisplay gameDisp = new GamePlayDisplay();
@@ -349,12 +324,18 @@ public class GamePlayDisplay {
 		gameDisp.updateOpponents(oppsScores);
 		gameDisp.updateTopic(topicStr);
 		gameDisp.updateQuestion(questionStr, difficultyStr);
-		gameDisp.updateAnswers(ans1Str, ans2Str, ans3Str, ans4Str);
+		gameDisp.updateAnswers(ansStr);
 
 		if(gameDisp.getAnswerChosen() != 0){
 			System.out.println(gameDisp.getAnswerChosen());
 		}//if
 
 	}//main()
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		/*** Add code to manipulate the interface here ***/
+		/*** Examples: load question, enable/disable interface, score update, ect ***/
+	}
 
 }//GamePlayDisplay
