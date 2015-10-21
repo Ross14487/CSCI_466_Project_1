@@ -3,16 +3,14 @@ package TrivaGameClient;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
-import java.util.Observer;
 import java.util.Observable;
 
 import TrivaGameServer.TrivaGameServer;
 
-public class TriviaGame extends Observable implements Runnable, Observer 
+public class TriviaGame extends Observable implements Runnable 
 {
     private ServiceInterface service;
     private UUID playerID, correctPlayerID, chosenAnswerId, answerId;
-    private Observable observablePlayerID, observablePlayerScore;
     private InetAddress groupIp, addr;
     private int portNum, buzzerTime, elapsedTime, unlockTime, allowedTime = 25, playerScore, correctInRow = 0;
     private TrivaGameServer server;
@@ -44,7 +42,7 @@ public class TriviaGame extends Observable implements Runnable, Observer
         elapsedTime = buzzerTime - unlockTime;
     }
     
-    private void submitAnswer(UUID answerID)
+    public void submitAnswer(UUID answerID)
     {
         setBuzzerTime();
         if (buzzerTime <= allowedTime)
@@ -84,11 +82,6 @@ public class TriviaGame extends Observable implements Runnable, Observer
     public int getScore()
     {
         return playerScore;
-    }
-    
-    public void update(Observable o, Object arg)
-    {
-        
     }
    
     public void run()

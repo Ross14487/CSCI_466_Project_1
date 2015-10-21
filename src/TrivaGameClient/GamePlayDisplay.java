@@ -49,6 +49,7 @@ public class GamePlayDisplay implements Observer  {
 	private JButton BUZZ;
 
 	private TriviaGame sys;
+	private Thread sysThread;
 	
 	public GamePlayDisplay() {} // WILL BE REMOVED AFTER TESTING!
 	
@@ -56,6 +57,9 @@ public class GamePlayDisplay implements Observer  {
 	{
 		this.sys = sys;
 		sys.addObserver(this);
+		
+		sysThread = new Thread(sys, "Game thread");
+		sysThread.start();
 	}
 
 	//go() method for the class; creates the GUI with components, registers the components with their listeners
@@ -282,6 +286,8 @@ public class GamePlayDisplay implements Observer  {
 		public void actionPerformed(ActionEvent arg0) {
 			quit = true;
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
+			/*** Add leaving game code here ***/
 
 		}//actionPerformed
 	}//quitListener
