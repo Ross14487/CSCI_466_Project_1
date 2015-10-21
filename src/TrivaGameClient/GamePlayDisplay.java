@@ -3,6 +3,7 @@ package TrivaGameClient;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.UUID;
@@ -50,6 +51,9 @@ public class GamePlayDisplay implements Observer  {
 
 	private TriviaGame sys;
 	private Thread sysThread;
+	private UUID playerID;
+	private InetAddress groupIp;
+	private UUID [] answer;
 	
 	public GamePlayDisplay() {} // WILL BE REMOVED AFTER TESTING!
 	
@@ -239,7 +243,7 @@ public class GamePlayDisplay implements Observer  {
 		for(JRadioButton btn : this.answers)
 			btn.setText(answers[x++]);
 	}//updateAnswers
-
+	
 	//Enables or disables answer buttons, based on boolean passed in
 	public void enableAnsButtons(boolean enable){
 		if(enable){
@@ -275,7 +279,8 @@ public class GamePlayDisplay implements Observer  {
 			buzzed = true;
 			enableBuzzer(false);
 			
-			/*** Add buzzer/submit answer logic here ***/
+			/*** Added buzzer/submit answer logic here ***/
+			sys.submitAnswer(selectedAnswerId);
 
 		}//actionPerformed
 	}//FieldListener
@@ -287,7 +292,10 @@ public class GamePlayDisplay implements Observer  {
 			quit = true;
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
-			/*** Add leaving game code here ***/
+			/*** Added leaving game code here ***/
+			playerID = sys.getPlayerID();
+			groupIp = sys.getGroupIp();
+			sys.leaveGame(playerID, groupIp);
 
 		}//actionPerformed
 	}//quitListener
@@ -295,7 +303,10 @@ public class GamePlayDisplay implements Observer  {
 	class answerSlectedListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			/*** add setting the answer UUID to send here ***/			
+			/*** added setting the answer UUID to send here ***/
+		    int index = Integer.parseInt(arg0.getActionCommand());
+		    selectedAnswerId = sys.getQuestionMsg().getAnswersId()[index];
+		    
 		}
 		
 	}
@@ -323,8 +334,9 @@ public class GamePlayDisplay implements Observer  {
 
 		GamePlayDisplay gameDisp = new GamePlayDisplay();
 		gameDisp.go();
-		gameDisp.enableAnsButtons(true);
-		gameDisp.enableBuzzer(true);
+		boolean enable = sys.getFreezeFlag();
+		gameDisp.enableAnsButtons(enable);
+		gameDisp.enableBuzzer(enable);
 		gameDisp.updateName(nameStr);
 		gameDisp.updateScore(scoreInt);
 		gameDisp.updateTimer(timeRem);

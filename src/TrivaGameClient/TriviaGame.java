@@ -15,8 +15,9 @@ public class TriviaGame extends Observable implements Runnable
     private int portNum, buzzerTime, elapsedTime, unlockTime, allowedTime = 25, playerScore, correctInRow = 0;
     private TrivaGameServer server;
     private boolean freezeFlag = false;
+    private QuestionMessage questionMsg;
 
-    public TriviaGame(ServiceInterface service, InetAddress groupIp, InetAddress addr, UUID playerID, int portNum, TrivaGameServer server, int playerScore)
+    public TriviaGame(ServiceInterface service, InetAddress groupIp, InetAddress addr, UUID playerID, int portNum, TrivaGameServer server)
     {
         this.service = service;
         this.groupIp = groupIp;
@@ -63,6 +64,49 @@ public class TriviaGame extends Observable implements Runnable
         chosenAnswerId = answerID;
     }
     
+    public void leaveGame(UUID playerID, InetAddress groupIp)
+    {
+        try
+        {
+            service.sendMessage(new BasicUserMessage(0x07, playerID, groupIp));
+        }
+        catch (UnknownHostException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    public UUID getPlayerID()
+    {
+        return playerID;
+    }
+    
+    public InetAddress getGroupIp()
+    {
+        return groupIp;
+    }
+    
+    public InetAddress GetAddress()
+    {
+        return addr;
+    }
+    
+    public int GetPortNum()
+    {
+        return portNum;
+    }
+    
+    public TrivaGameServer GetServer()
+    {
+        return server;
+    }
+    
     public int getBuzzerTime()
     {
         return buzzerTime;
@@ -73,12 +117,23 @@ public class TriviaGame extends Observable implements Runnable
         return elapsedTime;
     }
     
+    public QuestionMessage getQuestionMsg()
+    {
+        return questionMsg;
+    }
+    
+    public boolean getFreezeFlag()
+    {
+        return freezeFlag;
+    }
+    
     public void setScore(int pointsAwarded)
     {
         playerScore = playerScore + pointsAwarded;
         setChanged();
-        notifyObservers(playerScore);
+        notifyObservers();
     }
+    
     public int getScore()
     {
         return playerScore;
@@ -95,7 +150,7 @@ public class TriviaGame extends Observable implements Runnable
             switch (msg.getOpcode())
             {
                 case 0x00: //Question
-                    //get questions and ??
+                    questionMsg = ((QuestionMessage)msg);
                     try
                     {
                         service.sendMessage(new BasicUserMessage(0x00, playerID, groupIp));
