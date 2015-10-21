@@ -12,6 +12,7 @@ import java.util.UUID;
 import TrivaGameClient.Message;
 import TrivaGameClient.OpcodeOnlyMessage;
 import TrivaGameClient.QuestionMessage;
+import TrivaGameClient.UserIDMessage;
 import TrivaGameClient.AnswerMessage;
 import TrivaGameClient.BasicUserMessage;
 import TrivaGameClient.BuzzerQueryMessage;
@@ -60,9 +61,10 @@ public class TrivaGame implements Observer, Runnable
 			try 
 			{
 				// send the question
-				if(nextQuestion)
+				if(nextQuestion || playerList.allPlayersReady())
 				{
 					nextQuestion = false;
+					playerList.clearPlayersReady();
 					msg = createQuestionPacket();
 					server.queueMessage(new TrivaMessage(groupIp, msg));
 					
@@ -80,6 +82,19 @@ public class TrivaGame implements Observer, Runnable
 					server.queueMessage(new TrivaMessage(groupIp, new OpcodeOnlyMessage(0x01)));
 					
 					checkBuzzer(5000);
+				}
+				// the user has timed out
+				else if(receivedMessage != null && receivedMessage.message.getOpcode() == 0x06)
+				{
+					// set that, that user timed out
+					playerList.playerReady(((BasicUserMessage) receivedMessage.message).getPlayerId(), true);
+					server.queueMessage(new TrivaMessage(groupIp, new UserIDMessage(0x06, ((BasicUserMessage) receivedMessage.message).getPlayerId())));
+				}
+				// the user has left
+				else if(receivedMessage != null && receivedMessage.message.getOpcode() == 0x07)
+				{
+					playerList.removePlayer(((BasicUserMessage) receivedMessage.message).getPlayerId());
+					server.queueMessage(new TrivaMessage(groupIp, new UserIDMessage(0x06, ((BasicUserMessage) receivedMessage.message).getPlayerId())));
 				}
 				
 				Thread.sleep(1);

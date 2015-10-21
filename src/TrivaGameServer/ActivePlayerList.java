@@ -164,6 +164,12 @@ public class ActivePlayerList
     	player.setReady(ready);
     }
     
+    public void clearPlayersReady()
+    {
+    	for(Player player : activePlayers)
+    		player.setReady(false);
+    }
+    
     private Player findPlayer(UUID id)
     {
     	for(Player player : activePlayers)
