@@ -3,6 +3,8 @@ package TrivaGameClient;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.UnknownHostException;
+import java.util.UUID;
 
 import javax.swing.*;
 
@@ -46,6 +48,8 @@ public class InitialDisplay {
 	private JLabel readyNWaiting;
 	
 	private RegistrationSystem sys;
+	private Message msg;
+	private UUID playerID;
 	
 	public InitialDisplay(){}	// WILL BE REMOVED AFTER TESTING!
 	
@@ -197,7 +201,22 @@ public class InitialDisplay {
 				register.setText("Register");
 				registered.setText("You are deregistered.");
 				
-				/*** add deregister code here ***/
+				/*** added deregister code here ***/
+				playerID = sys.getPlayerID();
+				try
+                {
+                    sys.DeRegisterUser(playerID);
+                }
+                catch (UnknownHostException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                catch (IllegalArgumentException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 				
 			}//if isRegistered already
 			else{
@@ -205,10 +224,25 @@ public class InitialDisplay {
 				register.setText("Deregister");
 				registered.setText("You are registered.");
 				updateName();
-				updateIp();
+				updateIp(); //where do I put the IP in RegistrationSystem????
 				
-				/*** add register code here ***/
-				
+				/*** added register code here ***/
+				try
+                {
+                    sys.Registration(getPlayerName());
+                    
+                }
+                catch (UnknownHostException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                catch (IllegalArgumentException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+				 
 			}//else
 		}//actionPerformed
 	}//FieldListener
@@ -224,7 +258,22 @@ public class InitialDisplay {
 				readyNWaiting.setText("Your game will begin shortly.");
 				ready.setText("Not Ready");
 				
-				/*** add ready code here ***/
+				/*** added ready code here ***/
+				playerID = sys.getPlayerID();
+				try
+                {
+                    sys.Ready(playerID);
+                }
+                catch (UnknownHostException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                catch (IllegalArgumentException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 			}
 			else
 			{
@@ -232,7 +281,21 @@ public class InitialDisplay {
 				readyNWaiting.setText("");
 				ready.setText("Ready");
 				
-				/*** add not ready code here ***/
+				/*** added not ready code here ***/
+				try
+                {
+                    sys.NotReady(playerID);
+                }
+                catch (UnknownHostException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                catch (IllegalArgumentException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 			}
 
 		}//actionPerformed

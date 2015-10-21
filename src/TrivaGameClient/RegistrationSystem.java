@@ -17,6 +17,8 @@ public class RegistrationSystem
 {
     private ServiceInterface service;
     private String errorMessage;
+    private Message message;
+    private UUID playerID;
     
     public RegistrationSystem(ServiceInterface service)
     {
@@ -26,13 +28,15 @@ public class RegistrationSystem
     private Message RegisterUser(String userName) throws UnknownHostException, IllegalArgumentException
     {
        service.sendMessage(new RegisterUserMessage(0x01, userName));
-       return WaitForMessage();
+       Message msg = WaitForMessage();
+       return msg;
     }//RegisterUser
       
     private Message WaitForMessage()
     {
         Message msg = null;
         while ((msg = service.getQueuedMessage()) == null);
+        playerID = ((UserInformationMessage)msg).getPlayerId();
         return msg;
     }//WaitForMessage
     
@@ -43,12 +47,12 @@ public class RegistrationSystem
         msg = WaitForMessage();
         if(((StatusMessage)msg).getSuccess())
         {
-            return RegisterUser(userName);   
+            return RegisterUser(userName); 
         }
         return msg;
     }//Registration
     
-    private boolean DeRegisterUser(UUID userID) throws UnknownHostException, IllegalArgumentException
+    public boolean DeRegisterUser(UUID userID) throws UnknownHostException, IllegalArgumentException
     {
         Message msg = null;
         service.sendMessage(new UserIDMessage(0x02, userID));
@@ -58,7 +62,7 @@ public class RegistrationSystem
         return ((StatusMessage)msg).getSuccess();
     }//DeRegisterUser
     
-    private boolean Ready (UUID userID) throws UnknownHostException, IllegalArgumentException
+    public boolean Ready (UUID userID) throws UnknownHostException, IllegalArgumentException
     {
         Message msg = null;
         service.sendMessage(new UserIDMessage(0x03, userID));
@@ -68,7 +72,7 @@ public class RegistrationSystem
         return ((StatusMessage)msg).getSuccess();
     }//Ready
     
-    private boolean NotReady (UUID userID) throws UnknownHostException, IllegalArgumentException
+    public boolean NotReady (UUID userID) throws UnknownHostException, IllegalArgumentException
     {
         Message msg = null;
         service.sendMessage(new UserIDMessage(0x04, userID));
@@ -77,6 +81,11 @@ public class RegistrationSystem
             errorMessage = ((StatusMessage)msg).getErrorMessage();
         return ((StatusMessage)msg).getSuccess();
     }//NotReady
+    
+    public UUID getPlayerID()
+    {
+        return playerID;
+    }
     
     public String getErrorMessage()
     {
