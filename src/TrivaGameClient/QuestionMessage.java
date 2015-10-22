@@ -15,7 +15,7 @@ public class QuestionMessage implements Message
 	
 	public QuestionMessage(byte[] rawMsg)
 	{
-		String[] csv = new String(Arrays.copyOfRange(rawMsg, 69, rawMsg.length), StandardCharsets.UTF_8).split("|");
+		String[] csv = new String(Arrays.copyOfRange(rawMsg, 69, rawMsg.length), StandardCharsets.UTF_8).split("#");
 		ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOfRange(rawMsg, 1, rawMsg.length));
 		questionId = buffer.getInt();
 		
@@ -64,7 +64,7 @@ public class QuestionMessage implements Message
 		
 		csv[6] = difficulty;
 		
-		strMsg = String.join("|", csv);
+		strMsg = String.join("#", csv);
 		
 		rawMsg = new byte[buffer.array().length + strMsg.length()];
 		ByteBuffer msgBuffer = ByteBuffer.wrap(rawMsg);
