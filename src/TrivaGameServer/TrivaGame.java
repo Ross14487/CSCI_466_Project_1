@@ -47,7 +47,7 @@ public class TrivaGame implements Observer, Runnable
 			// check if the server is still running
 			if(caller.isRunning())
 			{
-				if(caller.getMessage().addr.equals(groupIp))
+				if(caller.getMessage().groupIp.equals(groupIp))
 					msgQueue.add(caller.getMessage());	// must be a message so added it to the message queue
 			}
 			
@@ -79,9 +79,9 @@ public class TrivaGame implements Observer, Runnable
 					
 					while(!confirmReceived((byte)0x00, 5000))
 						server.queueMessage(new TrivaMessage(groupIp, msg));	// try again if it failed
+					
+					unlockScreen(5000);
 				}
-				
-				unlockScreen(5000);
 				
 				// look for the buzzer
 				if((receivedMessage = processQueuedMessage()) != null && receivedMessage.message.getOpcode() == 0x01)
@@ -210,10 +210,36 @@ public class TrivaGame implements Observer, Runnable
 		playerList.clearReceived();
 		
 		//confirm 
-		while(!confirmReceived((byte)0x04, 5000))
+		while(!confirmReceived((byte)0x04, 5000, userId))
 			server.queueMessage(new TrivaMessage(groupIp, new CorrectAnswerMessage(0x04, userId, pointsReceived)));	// try again if it failed
 		
 		playerList.clearReceived();
+	}
+	
+	private boolean confirmReceived(byte opcode, long timeToWait, UUID playerId) throws InterruptedException
+	{
+		TrivaMessage msg;
+		long maxWait = System.currentTimeMillis() + timeToWait;
+		
+		while(!playerList.didPlayerReceive(playerId))
+		{
+			// hit a timeout
+			if(maxWait < System.currentTimeMillis())
+				return false;
+			
+			// read all queued messages
+			while((msg = processQueuedMessage()) != null)
+			{
+				// check if the message is the code we are looking for
+				if(msg.message.getOpcode() == opcode)
+					playerList.setPlayerReceived(((BasicUserMessage) msg.message).getPlayerId(), true);
+				
+			}
+			
+			Thread.sleep(1);
+		}
+		
+		return true;
 	}
 	
 	private boolean confirmReceived(byte opcode, long timeToWait) throws InterruptedException 
@@ -264,14 +290,14 @@ public class TrivaGame implements Observer, Runnable
 	
 	private Message createQuestionPacket()
 	{
-		int cnt = 0;
 		String[] answers = new String[4];
 		UUID[] answerIds = new UUID[4];
+		List<Answer> answerList = currentProblem.getAnswers();
 		
-		for(Answer ans : currentProblem.getAnswers())
+		for(int index = 0; index < 4; index++)
 		{
-			answers[cnt] = ans.getAnswer();
-			answerIds[cnt++] = ans.getAnswerId();
+			answers[index] = answerList.get(index).getAnswer();
+			answerIds[index] = answerList.get(index).getAnswerId();
 		}
 		
 		return new QuestionMessage(0x00, currentProblem.getQuestionId(), answerIds, 
