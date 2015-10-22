@@ -38,6 +38,7 @@ public class InitialDisplay {
 	private boolean isRegistered = false;
 	private boolean isReady = false;
 
+	private JFrame frame;
 	private JLabel yourName;
 	private JTextField enterYourName;
 	private JLabel serverIP;
@@ -63,7 +64,7 @@ public class InitialDisplay {
 	{
 
 		//Components for frame
-		JFrame frame = new JFrame("Registration Window");
+		frame = new JFrame("Registration Window");
 		yourName = new JLabel("Your name: ");
 		JLabel enterN = new JLabel("Enter: ");
 		JLabel enterS = new JLabel("Enter: ");
@@ -166,6 +167,21 @@ public class InitialDisplay {
 	public boolean getIsReady(){
 		return isReady;
 	}//getIsReady
+	
+	public void hideWindow(){
+	    frame.setVisible(false);
+	}//hideWindow
+	
+	public void showWindow(){
+	    frame.setVisible(true);
+	}//showWindow
+	
+	public void resetVals(){
+	    nameStr = "";
+	    serverIPStr = "";
+	    isRegistered = false;
+	    isReady = false;
+	}//resetVals
 	
 
 	/**

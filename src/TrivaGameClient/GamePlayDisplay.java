@@ -53,7 +53,7 @@ public class GamePlayDisplay implements Observer  {
 	private Thread sysThread;
 	private UUID playerID;
 	private InetAddress groupIp;
-	private UUID [] answer;
+	private UUID [] answerIDs;
 	
 	public GamePlayDisplay() {} // WILL BE REMOVED AFTER TESTING!
 	
@@ -265,6 +265,13 @@ public class GamePlayDisplay implements Observer  {
 			BUZZ.setEnabled(false);
 		}//else
 	}//enableBuzzer
+	
+	public void resetVals(){
+	    buzzed = false;
+	    answerChosen = 0;
+	    quit = false;
+	    //TODO reset to initial UUID val: selectedAnswerId;
+	}//resetVals
 
 	/**
 	 * 
@@ -290,6 +297,7 @@ public class GamePlayDisplay implements Observer  {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			quit = true;
+			frame.setVisible(false);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
 			/*** Added leaving game code here ***/
@@ -305,7 +313,7 @@ public class GamePlayDisplay implements Observer  {
 		public void actionPerformed(ActionEvent arg0) {
 			/*** added setting the answer UUID to send here ***/
 		    int index = Integer.parseInt(arg0.getActionCommand());
-		    selectedAnswerId = sys.getQuestionMsg().getAnswersId()[index];
+		    selectedAnswerId = answerIDs[index];
 		    
 		}
 		
@@ -334,7 +342,7 @@ public class GamePlayDisplay implements Observer  {
 
 		GamePlayDisplay gameDisp = new GamePlayDisplay();
 		gameDisp.go();
-		boolean enable = sys.getFreezeFlag();
+		boolean enable = true;
 		gameDisp.enableAnsButtons(enable);
 		gameDisp.enableBuzzer(enable);
 		gameDisp.updateName(nameStr);
@@ -357,6 +365,15 @@ public class GamePlayDisplay implements Observer  {
 		{
 		/*** Add code to manipulate the interface here ***/
 		/*** Examples: load question, enable/disable interface, score update, ect ***/
+		    QuestionMessage msg = ((TriviaGame) arg0).getQuestionMsg();
+		    updateTopic(msg.getCategory());
+		    answerIDs = msg.getAnswersId();
+		    updateQuestion(msg.getQuestion(), msg.getDifficulty());
+		    updateAnswers(msg.getAnswers());
+		    boolean enable = !sys.getFreezeFlag();
+		    enableAnsButtons(enable);
+		    enableBuzzer(enable);
+		    updateScore(((TriviaGame) arg0).getScore());
 		}
 	}
 

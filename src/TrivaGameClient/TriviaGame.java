@@ -280,6 +280,8 @@ public class TriviaGame extends Observable implements Runnable
                 case 0x05: //Start or Unfreeze
                     setUnlockTime();
                     freezeFlag = false;
+                    setChanged();
+                    notifyObservers();
                     try
                     {
                         service.sendMessage(new BasicUserMessage(0x05, playerID, groupIp));
@@ -298,6 +300,9 @@ public class TriviaGame extends Observable implements Runnable
                     
                 case 0x06: //Times Up
                     correctPlayerID = ((UserIDMessage)msg).getUserId(); //should this be AnswerMessage ????????
+                    freezeFlag = true;
+                    setChanged();
+                    notifyObservers();
                     try
                     {
                         service.sendMessage(new BasicUserMessage(0x06, playerID, groupIp));
