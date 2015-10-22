@@ -1,4 +1,4 @@
-package TCPTestClient;
+package TrivaGameClient;
 
 import TrivaGameClient.GamePlayDisplay;
 import TrivaGameClient.InitialDisplay;
