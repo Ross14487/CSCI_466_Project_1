@@ -273,6 +273,7 @@ public class InitialDisplay {
                     	portNum = ((UserInformationMessage) msg).getPortNumber();
                     	groupIpAddr = ((UserInformationMessage) msg).getGroupIp().getHostAddress();
                     	playerID = ((UserInformationMessage) msg).getPlayerId();
+                    	sys.setPlayerID(playerID);
         				isRegistered = true;
         				register.setText("Deregister");
         				registered.setText("You are registered.");

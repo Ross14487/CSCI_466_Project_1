@@ -42,7 +42,6 @@ public class RegistrationSystem
     {
         Message msg = null;
         while ((msg = service.getQueuedMessage()) == null);
-        playerID = ((UserInformationMessage)msg).getPlayerId();
         return msg;
     }//WaitForMessage
     
@@ -88,6 +87,10 @@ public class RegistrationSystem
         return ((StatusMessage)msg).getSuccess();
     }//NotReady
     
+    public void setPlayerID(UUID playerID)
+    {
+       this.playerID = playerID; 
+    }
     public UUID getPlayerID()
     {
         return playerID;
