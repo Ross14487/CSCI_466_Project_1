@@ -3,6 +3,7 @@ package TrivaGameClient;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class UserInformationMessage implements Message 
@@ -15,7 +16,7 @@ public class UserInformationMessage implements Message
 	public UserInformationMessage(byte[] rawMsg) throws UnknownHostException
 	{
 		byte[] ipAddr = new byte[4];
-		ByteBuffer buffer = ByteBuffer.wrap(rawMsg, 1, rawMsg.length);
+		ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOfRange(rawMsg, 1, rawMsg.length));
 		this.rawMsg = rawMsg;
 		
 		this.playerID = new UUID(buffer.getLong(), buffer.getLong());
