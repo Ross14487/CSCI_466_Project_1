@@ -257,10 +257,12 @@ public class TCP_Sock implements NetworkInterface, Runnable
 	   	{
 	   		try 
 	   		{
+	   			byte[] msg;
 	   			clientSocket = srvSocket.accept();
 	   			clientSocket.setSoTimeout(timeout);
 	   			
-	   			clientReceive(handler);
+				msg = receive(clientSocket);
+				handler.handler(clientSocket.getInetAddress(), msg);
 	   		} 
 	   		catch (SocketTimeoutException  e)
 	   		{}
