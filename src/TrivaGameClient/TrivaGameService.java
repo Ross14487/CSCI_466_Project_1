@@ -2,8 +2,8 @@ package TrivaGameClient;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import TrivaGameServer.HandableObject;
 import TrivaGameServer.NetworkInterface;
@@ -11,7 +11,7 @@ import TrivaGameServer.NetworkInterface;
 public class TrivaGameService implements HandableObject, ServiceInterface 
 {
 	private int port;
-	private Queue<Message> messageQueue = new LinkedList<Message>();
+	private Queue<Message> messageQueue = new ConcurrentLinkedQueue<Message>();
 	private NetworkInterface socket;
 	private InetAddress addr;
 	
@@ -65,18 +65,18 @@ public class TrivaGameService implements HandableObject, ServiceInterface
 		switch(msg[0])
 		{
 		case 0x00:
-			messageQueue.add(new QuestionMessage(msg));
+			 messageQueue.offer(new QuestionMessage(msg));
 			break;
 		case 0x01:
 		case 0x02:
 		case 0x05:
-			messageQueue.add(new OpcodeOnlyMessage(msg));
+			messageQueue.offer(new OpcodeOnlyMessage(msg));
 			break;
 		case 0x03:
-			messageQueue.add(new UserIDMessage(msg));
+			messageQueue.offer(new UserIDMessage(msg));
 			break;
 		case 0x04:
-			messageQueue.add(new CorrectAnswerMessage(msg));
+			messageQueue.offer(new CorrectAnswerMessage(msg));
 			break;
 		}
 	}

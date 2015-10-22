@@ -38,6 +38,8 @@ public class BasicUserMessage implements Message
 		buffer.put(addr.getAddress());
 		buffer.putLong(playerId.getMostSignificantBits());
 		buffer.putLong(playerId.getLeastSignificantBits());
+		
+		this.rawMsg = buffer.array();
 	}
 	
 	public UUID getPlayerId()

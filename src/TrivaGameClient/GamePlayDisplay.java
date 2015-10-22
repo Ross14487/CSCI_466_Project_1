@@ -60,7 +60,7 @@ public class GamePlayDisplay implements Observer  {
 		this.sys = sys;
 		sys.addObserver(this);
 		
-		sysThread = new Thread(sys, "Game thread");
+		sysThread = new Thread(sys);
 		sysThread.start();
 	}
 
@@ -362,7 +362,7 @@ public class GamePlayDisplay implements Observer  {
 		if(arg0 instanceof TriviaGame)
 		{
 		/*** Add code to manipulate the interface here ***/
-		/*** Examples: load question, enable/disable interface, score update, ect ***/
+		/*** Examples: load question, enable/disable interface, score update, etc ***/
 		    QuestionMessage msg = ((TriviaGame) arg0).getQuestionMsg();
 		    updateTopic(msg.getCategory());
 		    answerIDs = msg.getAnswersId();

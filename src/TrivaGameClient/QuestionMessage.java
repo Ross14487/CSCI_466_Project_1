@@ -15,6 +15,7 @@ public class QuestionMessage implements Message
 	
 	public QuestionMessage(byte[] rawMsg)
 	{
+		this.rawMsg = rawMsg;           
 		String[] csv = new String(Arrays.copyOfRange(rawMsg, 69, rawMsg.length), StandardCharsets.UTF_8).split("#");
 		ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOfRange(rawMsg, 1, rawMsg.length));
 		questionId = buffer.getInt();
