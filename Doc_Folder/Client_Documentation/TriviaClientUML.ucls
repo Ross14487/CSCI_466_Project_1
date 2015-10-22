@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.8" icons="false" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true">  
+  <interface id="1" language="java" name="TrivaGameClient.Message" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/Message.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="113" x="602" y="2575"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="2" language="java" name="TrivaGameClient.ServiceInterface" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/ServiceInterface.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="177" x="642" y="2215"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="3" language="java" name="TrivaGameClient.UserIDMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/UserIDMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="160" width="137" x="1054" y="2215"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="TrivaGameClient.InitialDisplay.serverIPListener" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/InitialDisplay.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="184" x="-206" y="719"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="TrivaGameClient.InitialDisplay.nameListener" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/InitialDisplay.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="184" x="39" y="719"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="TrivaGameClient.BasicUserMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/BasicUserMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="208" width="217" x="1846" y="2215"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="TrivaGameClient.BuzzerQueryMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/BuzzerQueryMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="112" width="255" x="2105" y="2575"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="TrivaGameClient.GamePlayDisplay" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/GamePlayDisplay.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="624" width="182" x="1487" y="719"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="TrivaGameClient.InitialDisplay" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/InitialDisplay.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="528" width="175" x="263" y="151"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="TrivaGameClient.TriviaGame" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/TriviaGame.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="512" width="260" x="1806" y="1663"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="TrivaGameClient.GamePlayDisplay.BUZZListener" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/GamePlayDisplay.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="184" x="1527" y="1383"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="12" language="java" name="TrivaGameServer.NetworkInterface" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameServer/NetworkInterface.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2288" y="2317"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="13" language="java" name="TrivaGameClient.OpcodeOnlyMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/OpcodeOnlyMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="128" width="155" x="859" y="2215"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="TrivaGameClient.GamePlayDisplay.quitListener" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/GamePlayDisplay.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="184" x="1751" y="1383"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="TrivaGameClient.RegisterUserMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/RegisterUserMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="160" width="173" x="121" y="1663"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="TrivaGameClient.InitialDisplay.readyListener" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/InitialDisplay.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="184" x="487" y="719"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="TrivaGameClient.StatusMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/StatusMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="192" width="182" x="399" y="2215"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="TrivaGameClient.QuestionMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/QuestionMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="320" width="298" x="1487" y="2215"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="TrivaGameClient.GamePlayDisplay.answerSlectedListener" 
+    project="CSCI_466_Project_1" file="/CSCI_466_Project_1/src/TrivaGameClient/GamePlayDisplay.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="80" width="184" x="1282" y="1383"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="TrivaGameClient.CorrectAnswerMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/CorrectAnswerMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="192" width="195" x="1252" y="2215"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="TrivaGameClient.UserInformationMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/UserInformationMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="224" width="257" x="81" y="2215"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="TrivaGameClient.InitialDisplay.registerListener" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/InitialDisplay.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="80" width="184" x="263" y="719"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="TrivaGameServer.UDP_Sock" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameServer/UDP_Sock.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="384" width="202" x="1903" y="151"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="TrivaGameClient.TriviaGameDriver" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/TriviaGameDriver.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="96" width="107" x="1193" y="15"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="TrivaGameServer.TCP_Sock" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameServer/TCP_Sock.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="480" width="202" x="2145" y="151"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="TrivaGameClient.RegistrationSystem" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/RegistrationSystem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="240" width="197" x="607" y="1383"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="TrivaGameClient.AnswerMessage" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/AnswerMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="144" width="247" x="1818" y="2575"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="TrivaGameClient.TrivaGameService" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/TrivaGameService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="192" width="273" x="1193" y="1663"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="TrivaGameClient.UserRegistrationService" project="CSCI_466_Project_1" 
+    file="/CSCI_466_Project_1/src/TrivaGameClient/UserRegistrationService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="192" width="239" x="578" y="1663"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="30">    
+    <bendpoint x="1815" y="2215"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <realization id="31">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <realization id="32">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <association id="33">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="34" name="service"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="36">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="37">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="38" name="questionMsg"/>      
+      <multiplicity id="39" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="40">    
+    <bendpoint x="50" y="2215"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <dependency id="41">    
+    <bendpoint x="868" y="1663"/>    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="42">    
+    <bendpoint x="892" y="151"/>    
+    <bendpoint x="892" y="719"/>    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <nesting id="43">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="11"/>  
+  </nesting>  
+  <dependency id="44">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="23"/>  
+  </dependency>  
+  <association id="45">    
+    <bendpoint x="847" y="1663"/>    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="46" name="service"/>      
+      <multiplicity id="47" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="48">    
+    <bendpoint x="2154" y="719"/>    
+    <bendpoint x="2154" y="1383"/>    
+    <bendpoint x="2154" y="1663"/>    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="12"/>  
+  </realization>  
+  <association id="49">    
+    <bendpoint x="368" y="1663"/>    
+    <bendpoint x="368" y="2215"/>    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="50" name="message"/>      
+      <multiplicity id="51" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="52">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <dependency id="53">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="54">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="55">    
+    <bendpoint x="1349" y="151"/>    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <nesting id="56">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="22"/>  
+  </nesting>  
+  <dependency id="57">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <realization id="58">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <nesting id="59">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="5"/>  
+  </nesting>  
+  <association id="60">    
+    <end type="SOURCE" refId="28" navigable="false">      
+      <attribute id="61" name="socket"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="63">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="25"/>  
+  </dependency>  
+  <nesting id="64">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="16"/>  
+  </nesting>  
+  <dependency id="65">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <realization id="66">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <association id="67">    
+    <bendpoint x="1221" y="2215"/>    
+    <end type="SOURCE" refId="28" navigable="false">      
+      <attribute id="68" name="messageQueue"/>      
+      <multiplicity id="69" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="70">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="19"/>  
+  </nesting>  
+  <association id="71">    
+    <bendpoint x="611" y="2215"/>    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="72" name="messageQueue"/>      
+      <multiplicity id="73" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="74">    
+    <bendpoint x="2114" y="2215"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <realization id="75">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <dependency id="76">    
+    <bendpoint x="889" y="1663"/>    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="77">    
+    <bendpoint x="701" y="719"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="78" name="sys"/>      
+      <multiplicity id="79" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="80">    
+    <bendpoint x="512" y="1663"/>    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="81">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <realization id="82">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <generalization id="83">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <realization id="84">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <dependency id="85">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="86">    
+    <bendpoint x="913" y="151"/>    
+    <bendpoint x="913" y="719"/>    
+    <bendpoint x="913" y="1383"/>    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <dependency id="87">    
+    <bendpoint x="90" y="1383"/>    
+    <bendpoint x="90" y="1663"/>    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <realization id="88">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <dependency id="89">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="90">    
+    <bendpoint x="1251" y="151"/>    
+    <bendpoint x="1251" y="719"/>    
+    <bendpoint x="1251" y="1383"/>    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="91">    
+    <bendpoint x="1496" y="1383"/>    
+    <bendpoint x="1496" y="1663"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="92">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <nesting id="93">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="14"/>  
+  </nesting>  
+  <dependency id="94">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <dependency id="95">    
+    <bendpoint x="29" y="1383"/>    
+    <bendpoint x="29" y="1663"/>    
+    <bendpoint x="29" y="2215"/>    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="96">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="97">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <association id="98">    
+    <bendpoint x="8" y="719"/>    
+    <bendpoint x="8" y="1383"/>    
+    <bendpoint x="8" y="1663"/>    
+    <bendpoint x="8" y="2215"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="99" name="msg"/>      
+      <multiplicity id="100" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="101">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <generalization id="102">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="103">    
+    <bendpoint x="1965" y="1383"/>    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="104" name="sys"/>      
+      <multiplicity id="105" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="106">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="107">    
+    <bendpoint x="347" y="1663"/>    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <nesting id="108">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="4"/>  
+  </nesting>  
+  <realization id="109">    
+    <bendpoint x="2096" y="719"/>    
+    <bendpoint x="2096" y="1383"/>    
+    <bendpoint x="2096" y="1663"/>    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="12"/>  
+  </realization>  
+  <dependency id="110">    
+    <bendpoint x="1202" y="151"/>    
+    <bendpoint x="1202" y="719"/>    
+    <bendpoint x="1202" y="1383"/>    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="28"/>  
+  </dependency>  
+  <dependency id="111">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="26"/>  
+  </dependency>  
+  <dependency id="112">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="29"/>  
+  </dependency>  
+  <association id="113">    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="114" name="socket"/>      
+      <multiplicity id="115" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="116">    
+    <bendpoint x="2093" y="2215"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="27"/>  
+  </dependency>  
+  <dependency id="117">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
