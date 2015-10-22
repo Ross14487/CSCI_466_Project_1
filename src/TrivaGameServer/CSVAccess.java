@@ -36,7 +36,7 @@ public class CSVAccess implements TrivaDataAccessInterface
 //	    this.problem = problemInput;
 //	}
     
-	public static boolean loadFile(String fileName)
+    public static boolean loadFile(String fileName)
 	{
 		int probNum = 1;
 	    boolean success = false;
@@ -48,7 +48,7 @@ public class CSVAccess implements TrivaDataAccessInterface
 		    	if(line.contains("<header>"))
 		    		continue;
 
-		        Problem problem = new Problem(probNum++, line.split("|"));   
+		        Problem problem = new Problem(probNum++, line.split("#"));   
 		        problems.add(problem);
 		    }
 		    success = true;
