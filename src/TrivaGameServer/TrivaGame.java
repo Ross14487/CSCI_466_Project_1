@@ -35,17 +35,21 @@ public class TrivaGame implements Observer, Runnable
 		this.playerList = playerList;
 		this.groupIp = playerList.getGroupAddress();
 		this.questions = questions;
+		this.server.addObserver(this);
 	}
 
 	@Override
-	public synchronized void update(Observable arg0, Object arg1) 
+	public void update(Observable arg0, Object arg1) 
 	{
 		if(arg0 instanceof TrivaGameServer)
 		{
 			TrivaGameServer caller = (TrivaGameServer)arg0;
 			// check if the server is still running
-			if(caller.isRunning() && caller.getMessage().addr.equals(groupIp))
-				msgQueue.add(caller.getMessage());	// must be a message so added it to the message queue
+			if(caller.isRunning())
+			{
+				if(caller.getMessage().addr.equals(groupIp))
+					msgQueue.add(caller.getMessage());	// must be a message so added it to the message queue
+			}
 			
 			else
 				run = false;						// the server is done stop running

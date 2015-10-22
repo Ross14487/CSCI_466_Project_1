@@ -115,9 +115,12 @@ public class TrivaGameServer extends Observable implements HandableObject
 		{
 			message = new TrivaMessage(addr, msg);
 			
-			// let the observers know new data is available
-			setChanged();
-			notifyObservers();
+			synchronized (this)
+			{
+				// let the observers know new data is available
+				setChanged();
+				notifyObservers();
+			}
 		} 
 		catch (UnknownHostException e) 
 		{
