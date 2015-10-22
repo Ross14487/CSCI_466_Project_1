@@ -25,7 +25,7 @@ public class TriviaGame extends Observable implements Runnable
         this.playerID = playerID;
         this.portNum = portNum;
         this.server = server;
-        this.playerScore = playerScore;
+        this.playerScore = 0;
     }//constructor
     
     private void setUnlockTime()
