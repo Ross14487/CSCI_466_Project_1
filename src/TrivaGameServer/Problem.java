@@ -43,7 +43,7 @@ public class Problem
     private int getRandomIndex()
     {
         generator = new Random(System.currentTimeMillis());
-        int randomIndex = generator.nextInt(3) + 1;
+        int randomIndex = generator.nextInt(4);
         return randomIndex;
     }//randomIndexGenerator
     
@@ -71,7 +71,7 @@ public class Problem
         }//for
         
         int count = 0;
-        while (count < 5)
+        while (count < 4)
         {
             int index = getRandomIndex();
             if (indexArray[index] == -1)

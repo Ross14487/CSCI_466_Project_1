@@ -72,7 +72,13 @@ public class UserRegistrationServer implements HandableObject
 				socket.send(createPacket((byte)0x02, new byte[] {0x01}));
 			else
 				socket.send(createStringMessage((byte)0x02, "Could not remove user"));
-			break;				
+			break;
+		case 0x03:
+			playerList.playerReady(getPlayerId(Arrays.copyOfRange(msg, 1, msg.length)), true);
+			break;
+		case 0x04:
+			playerList.playerReady(getPlayerId(Arrays.copyOfRange(msg, 1, msg.length)), false);
+			break;
 		}
 	}
 	

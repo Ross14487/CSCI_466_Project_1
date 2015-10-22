@@ -27,11 +27,14 @@ public class TrivaGame implements Observer, Runnable
 	private boolean nextQuestion = true;
 	private volatile boolean run = true;
 	private Queue<TrivaMessage> msgQueue = new LinkedList<TrivaMessage>();
+	private List<Problem> questions;
+	
 	public TrivaGame(TrivaGameServer server, ActivePlayerList playerList, List<Problem> questions)
 	{
 		this.server = server;
 		this.playerList = playerList;
 		this.groupIp = playerList.getGroupAddress();
+		this.questions = questions;
 	}
 
 	@Override
@@ -52,6 +55,7 @@ public class TrivaGame implements Observer, Runnable
 	@Override
 	public void run() 
 	{
+		int index = 0;
 		while(run)
 		{
 			Message msg;
@@ -63,6 +67,7 @@ public class TrivaGame implements Observer, Runnable
 				// send the question
 				if(nextQuestion || playerList.allPlayersReady())
 				{
+					currentProblem = questions.get(index%questions.size());
 					nextQuestion = false;
 					playerList.clearPlayersReady();
 					msg = createQuestionPacket();

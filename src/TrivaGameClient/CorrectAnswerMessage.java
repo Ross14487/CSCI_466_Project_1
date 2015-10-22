@@ -1,6 +1,7 @@
 package TrivaGameClient;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class CorrectAnswerMessage implements Message 
@@ -12,7 +13,7 @@ public class CorrectAnswerMessage implements Message
 	public CorrectAnswerMessage(byte[] rawMsg)
 	{
 		this.rawMsg = rawMsg;
-		ByteBuffer buffer = ByteBuffer.wrap(rawMsg, 1, rawMsg.length);
+		ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOfRange(rawMsg, 1, rawMsg.length));
 		
 		playerId = new UUID(buffer.getLong(), buffer.getLong());
 		points = buffer.getInt();
