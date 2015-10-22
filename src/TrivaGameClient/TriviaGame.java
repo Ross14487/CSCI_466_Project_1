@@ -5,26 +5,21 @@ import java.net.UnknownHostException;
 import java.util.UUID;
 import java.util.Observable;
 
-import TrivaGameServer.TrivaGameServer;
-
 public class TriviaGame extends Observable implements Runnable 
 {
     private ServiceInterface service;
     private UUID playerID, correctPlayerID, chosenAnswerId, answerId;
-    private InetAddress groupIp, addr;
+    private InetAddress groupIp;
     private int portNum, buzzerTime, elapsedTime, unlockTime, allowedTime = 25, playerScore, correctInRow = 0;
-    private TrivaGameServer server;
     private boolean freezeFlag = false;
     private QuestionMessage questionMsg;
 
-    public TriviaGame(ServiceInterface service, InetAddress groupIp, InetAddress addr, UUID playerID, int portNum, TrivaGameServer server)
+    public TriviaGame(ServiceInterface service, InetAddress groupIp, UUID playerID, int portNum)
     {
         this.service = service;
         this.groupIp = groupIp;
-        this.addr = addr;
         this.playerID = playerID;
         this.portNum = portNum;
-        this.server = server;
         this.playerScore = 0;
     }//constructor
     
@@ -92,19 +87,9 @@ public class TriviaGame extends Observable implements Runnable
         return groupIp;
     }
     
-    public InetAddress GetAddress()
-    {
-        return addr;
-    }
-    
     public int GetPortNum()
     {
         return portNum;
-    }
-    
-    public TrivaGameServer GetServer()
-    {
-        return server;
     }
     
     public int getBuzzerTime()
@@ -210,7 +195,7 @@ public class TriviaGame extends Observable implements Runnable
                         setElapsedTime();
                         try
                         {
-                            service.sendMessage(new AnswerMessage(0x03, playerID, addr, chosenAnswerId, elapsedTime));
+                            service.sendMessage(new AnswerMessage(0x03, playerID, groupIp, chosenAnswerId, elapsedTime));
                         }
                         catch (UnknownHostException e)
                         {

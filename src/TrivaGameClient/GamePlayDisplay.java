@@ -55,8 +55,6 @@ public class GamePlayDisplay implements Observer  {
 	private InetAddress groupIp;
 	private UUID [] answerIDs;
 	
-	public GamePlayDisplay() {} // WILL BE REMOVED AFTER TESTING!
-	
 	public GamePlayDisplay(TriviaGame sys)
 	{
 		this.sys = sys;
@@ -327,37 +325,37 @@ public class GamePlayDisplay implements Observer  {
 	 */
 
 	//main method for creating an InitialDisplay object and calling its go() method
-	public static void main(String [] args)
-	{
-		int scoreInt = 0;
-		String nameStr = "Anon";
-		double timeRem = 0.0;
-		String[] oppsScores = {"Adam 2", "Claire 3", "Erin 5", "Fred 2", "Gene 2", "Harper 4", "Roger 6", "Stacy 8", 
-				"Susy 2", "Perry 5", "James 4", "Jess 5", "Rhonda 5"};
-		String topicStr = "All the things\n";
-		String questionStr = "What are all the things in the world, huh? What? What? What?....What?\n";
-		String difficultyStr = "Expert (5 points)";
-		String[] ansStr = { "For reals, like what?", "All the things are everything.", "Winning isn't everything. It's all the things.", "Things da best. Da best!"};
+//	public static void main(String [] args)
+//	{
+//		int scoreInt = 0;
+//		String nameStr = "Anon";
+//		double timeRem = 0.0;
+//		String[] oppsScores = {"Adam 2", "Claire 3", "Erin 5", "Fred 2", "Gene 2", "Harper 4", "Roger 6", "Stacy 8", 
+//				"Susy 2", "Perry 5", "James 4", "Jess 5", "Rhonda 5"};
+//		String topicStr = "All the things\n";
+//		String questionStr = "What are all the things in the world, huh? What? What? What?....What?\n";
+//		String difficultyStr = "Expert (5 points)";
+//		String[] ansStr = { "For reals, like what?", "All the things are everything.", "Winning isn't everything. It's all the things.", "Things da best. Da best!"};
 
 
-		GamePlayDisplay gameDisp = new GamePlayDisplay();
-		gameDisp.go();
-		boolean enable = true;
-		gameDisp.enableAnsButtons(enable);
-		gameDisp.enableBuzzer(enable);
-		gameDisp.updateName(nameStr);
-		gameDisp.updateScore(scoreInt);
-		gameDisp.updateTimer(timeRem);
-		gameDisp.updateOpponents(oppsScores);
-		gameDisp.updateTopic(topicStr);
-		gameDisp.updateQuestion(questionStr, difficultyStr);
-		gameDisp.updateAnswers(ansStr);
+//		GamePlayDisplay gameDisp = new GamePlayDisplay();
+//		gameDisp.go();
+//		boolean enable = true;
+//		gameDisp.enableAnsButtons(enable);
+//		gameDisp.enableBuzzer(enable);
+//		gameDisp.updateName(nameStr);
+//		gameDisp.updateScore(scoreInt);
+//		gameDisp.updateTimer(timeRem);
+//		gameDisp.updateOpponents(oppsScores);
+//		gameDisp.updateTopic(topicStr);
+//		gameDisp.updateQuestion(questionStr, difficultyStr);
+//		gameDisp.updateAnswers(ansStr);
 
-		if(gameDisp.getAnswerChosen() != 0){
-			System.out.println(gameDisp.getAnswerChosen());
-		}//if
+//		if(gameDisp.getAnswerChosen() != 0){
+//			System.out.println(gameDisp.getAnswerChosen());
+//		}//if
 
-	}//main()
+//	}//main()
 
 	@Override
 	public void update(Observable arg0, Object arg1) {

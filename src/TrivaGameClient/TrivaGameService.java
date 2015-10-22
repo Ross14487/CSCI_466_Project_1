@@ -25,11 +25,12 @@ public class TrivaGameService implements HandableObject, ServiceInterface
 		return addr;
 	}
 	
-	public TrivaGameService(String addr, int port, NetworkInterface socket) throws UnknownHostException
+	public TrivaGameService(String addr, String groupIp, int port, NetworkInterface socket) throws UnknownHostException
 	{
 		this.port = port;
 		this.addr = InetAddress.getByName(addr);
 		this.socket = socket;
+		socket.connect(groupIp);
 		
 		socket.startReceive(this);
 	}
@@ -43,7 +44,7 @@ public class TrivaGameService implements HandableObject, ServiceInterface
 	@Override
 	public boolean sendMessage(Message msg) throws UnknownHostException, IllegalArgumentException 
 	{
-		return socket.send(msg.getMessage());
+		return socket.send(msg.getMessage(), addr.getHostAddress());
 	}
 
 	@Override

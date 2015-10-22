@@ -35,6 +35,8 @@ public class InitialDisplay {
 
 	private String nameStr = "";
 	private String serverIPStr = "";
+	private String groupIpAddr = "";
+	private int portNum = 0;
 	private boolean isRegistered = false;
 	private boolean isReady = false;
 
@@ -51,8 +53,6 @@ public class InitialDisplay {
 	private RegistrationSystem sys;
 	private Message msg;
 	private UUID playerID;
-	
-	public InitialDisplay(){}	// WILL BE REMOVED AFTER TESTING!
 	
 	public InitialDisplay(RegistrationSystem sys)
 	{
@@ -144,7 +144,27 @@ public class InitialDisplay {
 	private void updateIp()
 	{
 		serverIPStr = enterServerIP.getText();
+		try 
+		{
+			sys.setAddress(serverIPStr);
+		} 
+		catch (UnknownHostException e) 
+		{
+			// TODO Auto-generated catch block
+			serverIPStr = "[ERR] Invalid Ip";
+			e.printStackTrace();
+		}
 		serverIP.setText("Server's IP: "+serverIPStr);
+	}
+	
+	public int getPortNum()
+	{
+		return portNum;
+	}
+	
+	public String getGroupIp()
+	{
+		return groupIpAddr;
 	}
 	
 
@@ -182,6 +202,11 @@ public class InitialDisplay {
 	    isRegistered = false;
 	    isReady = false;
 	}//resetVals
+	
+	public UUID getPlayerId()
+	{
+		return playerID;
+	}
 	
 
 	/**
@@ -236,16 +261,24 @@ public class InitialDisplay {
 				
 			}//if isRegistered already
 			else{
-				isRegistered = true;
-				register.setText("Deregister");
-				registered.setText("You are registered.");
 				updateName();
 				updateIp(); //where do I put the IP in RegistrationSystem????
 				
 				/*** added register code here ***/
 				try
                 {
-                    sys.Registration(getPlayerName());
+                    Message msg = sys.Registration(getPlayerName());
+                    if(msg instanceof UserInformationMessage)
+                    {
+                    	portNum = ((UserInformationMessage) msg).getPortNumber();
+                    	groupIpAddr = ((UserInformationMessage) msg).getGroupIp().getHostAddress();
+                    	playerID = ((UserInformationMessage) msg).getPlayerId();
+        				isRegistered = true;
+        				register.setText("Deregister");
+        				registered.setText("You are registered.");
+                    }
+                    else
+                    	registered.setText("Registration Failed");
                     
                 }
                 catch (UnknownHostException e)
@@ -320,10 +353,10 @@ public class InitialDisplay {
 
 
 	//main method for creating an InitialDisplay object and calling its go() method
-	public static void main(String [] args)
-	{
-		InitialDisplay initDisp = new InitialDisplay();
-		initDisp.go();
-	}//main()
+//	public static void main(String [] args)
+//	{
+//		InitialDisplay initDisp = new InitialDisplay();
+//		initDisp.go();
+//	}//main()
 
 }//InitialDisplay

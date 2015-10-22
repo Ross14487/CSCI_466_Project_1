@@ -23,11 +23,15 @@ public class UserRegistrationService implements ServiceInterface
 		return addr;
 	}
 	
-	public UserRegistrationService(String addr, int port, NetworkInterface socket) throws UnknownHostException
+	public UserRegistrationService(int port, NetworkInterface socket)
 	{
 		this.port = port;
-		this.addr = InetAddress.getByName(addr);
 		this.socket = socket;
+	}
+	
+	public void setAddress(String addr) throws UnknownHostException
+	{
+		this.addr = InetAddress.getByName(addr);
 	}
 
 	@Override

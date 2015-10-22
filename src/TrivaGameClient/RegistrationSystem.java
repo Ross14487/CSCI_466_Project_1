@@ -1,6 +1,7 @@
 package TrivaGameClient;
 
 
+import java.net.InetAddress;
 /******************************************************************************
  * Name        :  Ross Mitchell 
  * email       :  RPMitchell@mtech.edu
@@ -22,8 +23,13 @@ public class RegistrationSystem
     
     public RegistrationSystem(ServiceInterface service)
     {
-       this.service = service;
+    	this.service = service;
     }//Constructor
+    
+    public void setAddress(String addr) throws UnknownHostException
+    {
+    	((UserRegistrationService)service).setAddress(addr);
+    }
     
     private Message RegisterUser(String userName) throws UnknownHostException, IllegalArgumentException
     {

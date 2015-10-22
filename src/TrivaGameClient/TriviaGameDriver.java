@@ -1,14 +1,20 @@
 package TrivaGameClient;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import TrivaGameClient.GamePlayDisplay;
 import TrivaGameClient.InitialDisplay;
+import TrivaGameServer.TCP_Sock;
+import TrivaGameServer.UDP_Sock;
 
 public class TriviaGameDriver
 {
-    public static void main(String[] args){
+	static final int registerPort = 3025;
+	
+    public static void main(String[] args) throws IOException{
         
-        InitialDisplay initDisp = new InitialDisplay();
-        GamePlayDisplay gameDisp = new GamePlayDisplay();
+        InitialDisplay initDisp = new InitialDisplay(new RegistrationSystem(new UserRegistrationService(registerPort, new TCP_Sock(registerPort, false))));
+        GamePlayDisplay gameDisp = null;
         initDisp.go();
             while(true){
             
@@ -25,6 +31,7 @@ public class TriviaGameDriver
                 if(isRead && isReg && serverIP != ""){
                     
                         initDisp.hideWindow();
+                        gameDisp = new GamePlayDisplay(new TriviaGame(new TrivaGameService(serverIP, initDisp.getGroupIp(), initDisp.getPortNum(), new UDP_Sock(initDisp.getPortNum(), true)), InetAddress.getByName(initDisp.getGroupIp()), initDisp.getPlayerId(), initDisp.getPortNum()));
                         gameDisp.go();
                         gameDisp.updateName(playerName);
                         gameDisp.updateScore(0);
@@ -53,7 +60,7 @@ public class TriviaGameDriver
                         
                 }//if isRead, isReg, player name is not empty, and serverIP is not empty
     
-                if(gameDisp.getQuit()){
+                if(gameDisp != null && gameDisp.getQuit()){
                     initDisp.resetVals();
                 }//if
                 initDisp.showWindow();
