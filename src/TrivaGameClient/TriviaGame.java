@@ -11,7 +11,7 @@ public class TriviaGame extends Observable implements Observer
     private ServiceInterface service;
     private UUID playerID, correctPlayerID, chosenAnswerId, answerId;
     private InetAddress groupIp;
-    private int portNum, buzzerTime, elapsedTime, unlockTime, allowedTime = 25, playerScore, correctInRow = 0;
+    private int portNum, buzzerTime, elapsedTime, unlockTime, startTime, timeLeft, allowedTime = 25, playerScore, correctInRow = 0;
     private boolean freezeFlag = false;
     private QuestionMessage questionMsg;
 
@@ -29,6 +29,18 @@ public class TriviaGame extends Observable implements Observer
     private void setUnlockTime()
     {
         unlockTime = (int)System.currentTimeMillis();
+    }
+    
+    public int getAllowedTime()
+    {
+        return allowedTime;
+    }
+    
+    public int getTimeRemaining()
+    {
+           startTime = unlockTime;
+           timeLeft = allowedTime - ((int)System.currentTimeMillis() - startTime);
+           return timeLeft;
     }
     
     private void setBuzzerTime()

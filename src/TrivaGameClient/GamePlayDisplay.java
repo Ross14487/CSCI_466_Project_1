@@ -54,6 +54,7 @@ public class GamePlayDisplay implements Observer  {
 	private UUID playerID;
 	private InetAddress groupIp;
 	private UUID [] answerIDs;
+	private int count = 25, delay = 1000;;
 	
 	public GamePlayDisplay(TriviaGame sys)
 	{
@@ -209,11 +210,20 @@ public class GamePlayDisplay implements Observer  {
 	}//updateScore
 
 	//Update the time shown by the countdown timer
-	public void updateTimer(double newTimeRem){
-		timer.setText("Timer: "+newTimeRem+"    ");
-	}//updateTimer
+ ActionListener countDown = new ActionListener() {  //create the new action listener object. 
+  public void updateCountDown(ActionEvent evt){
+            if (count > 0){
+                int newTimeRem = sys.getTimeRemaining();
+                timer.setText("Timer: "+newTimeRem+"    "); 
+                count--;//Decrease our count.
+            }
+            else
+                enableBuzzer(false);
+ //         }
+          new Timer(delay, countDown).start();// Create the new timer.
+      }//updateCountDown
 
-	//Update the opponents displayed by passing in an array of Playe, Score pairs
+	//Update the opponents displayed by passing in an array of Player, Score pairs
 	public void updateOpponents(String[] opponents){
 		opponentsText.setText("");
 		for(int i = 0; i < opponents.length; i++){
@@ -252,8 +262,10 @@ public class GamePlayDisplay implements Observer  {
 	}//enableButtons
 
 	//Enables or disables the buzzer button, based on boolean passed in
+	// and sets the count for the maximum time for the Countdown Timer
 	public void enableBuzzer(boolean enable){
 		if(enable){
+		    count = sys.getAllowedTime();
 			BUZZ.setEnabled(true);
 		}//if
 		else{
