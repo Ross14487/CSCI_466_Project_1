@@ -2,13 +2,14 @@ package TrivaGameClient;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Observable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import TrivaGameServer.HandableObject;
 import TrivaGameServer.NetworkInterface;
 
-public class TrivaGameService implements HandableObject, ServiceInterface 
+public class TrivaGameService extends Observable implements HandableObject, ServiceInterface 
 {
 	private int port;
 	private Queue<Message> messageQueue = new ConcurrentLinkedQueue<Message>();
@@ -53,6 +54,8 @@ public class TrivaGameService implements HandableObject, ServiceInterface
 		try 
 		{
 			queueMessage(msg);
+			setChanged();
+			notifyObservers();
 		} 
 		catch (UnknownHostException | IllegalArgumentException e) 
 		{

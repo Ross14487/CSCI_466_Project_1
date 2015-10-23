@@ -3,10 +3,13 @@ package TrivaGameClient;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
 
 import javax.swing.*;
+
+import TrivaGameServer.UDP_Sock;
 
 /**
  * 
@@ -265,6 +268,10 @@ public class InitialDisplay {
 				updateIp(); //where do I put the IP in RegistrationSystem????
 				
 				/*** added register code here ***/
+				
+				if(serverIPStr.isEmpty())
+					return;
+				
 				try
                 {
                     Message msg = sys.Registration(getPlayerName());
@@ -302,7 +309,7 @@ public class InitialDisplay {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			if(!isReady)
+			if(!isReady && getIsRegistered())
 			{
 				isReady = true;
 				readyNWaiting.setText("Your game will begin shortly.");
@@ -313,6 +320,7 @@ public class InitialDisplay {
 				try
                 {
                     sys.Ready(playerID);
+                    startGame();
                 }
                 catch (UnknownHostException e)
                 {
@@ -351,6 +359,23 @@ public class InitialDisplay {
 		}//actionPerformed
 	}//FieldListener
 
+	private void startGame() throws UnknownHostException
+	{
+		TriviaGame gameSystem = new TriviaGame(new TrivaGameService(serverIPStr, getGroupIp(), getPortNum(), new UDP_Sock(getPortNum(), true)), InetAddress.getByName(getGroupIp()), getPlayerId(), getPortNum());
+		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TriviaGameDisplay frame = new TriviaGameDisplay(gameSystem);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		this.frame.dispose();
+	}
 
 
 	//main method for creating an InitialDisplay object and calling its go() method

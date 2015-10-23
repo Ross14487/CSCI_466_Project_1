@@ -4,8 +4,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
 import java.util.Observable;
+import java.util.Observer;
 
-public class TriviaGame extends Observable implements Runnable 
+public class TriviaGame extends Observable implements Observer 
 {
     private ServiceInterface service;
     private UUID playerID, correctPlayerID, chosenAnswerId, answerId;
@@ -21,6 +22,8 @@ public class TriviaGame extends Observable implements Runnable
         this.playerID = playerID;
         this.portNum = portNum;
         this.playerScore = 0;
+        
+        ((TrivaGameService)service).addObserver(this);
     }//constructor
     
     private void setUnlockTime()
@@ -42,24 +45,26 @@ public class TriviaGame extends Observable implements Runnable
     {
         setBuzzerTime();
         if (buzzerTime <= allowedTime)
-        try
         {
-            service.sendMessage(new BasicUserMessage(0x01, playerID, groupIp));
+	        try
+	        {
+	            service.sendMessage(new BasicUserMessage(0x01, playerID, groupIp));
+	        }
+	        catch (UnknownHostException e)
+	        {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        catch (IllegalArgumentException e)
+	        {
+	            // TODO Auto-generated catch block
+	            e.printStackTrace();
+	        }
+	        chosenAnswerId = answerID;
         }
-        catch (UnknownHostException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IllegalArgumentException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        chosenAnswerId = answerID;
     }
     
-    public void leaveGame(UUID playerID, InetAddress groupIp)
+    public void leaveGame()
     {
         try
         {
@@ -116,7 +121,6 @@ public class TriviaGame extends Observable implements Runnable
     {
         playerScore = playerScore + pointsAwarded;
         setChanged();
-        notifyObservers();
     }
     
     public int getScore()
@@ -124,21 +128,22 @@ public class TriviaGame extends Observable implements Runnable
         return playerScore;
     }
    
-    public void run()
+    public void preformAction(ServiceInterface srv)
     {
         Message msg = null;
-        while (true)
+        
+        // read the queue
+        while ((msg = srv.getQueuedMessage()) != null)
         {
-            msg = service.getQueuedMessage();
-            if (msg == null)
-                continue;
             switch (msg.getOpcode())
             {
                 case 0x00: //Question
-                    questionMsg = ((QuestionMessage)msg);
+                    questionMsg = ((QuestionMessage)msg);            
                     try
                     {
-                        service.sendMessage(new BasicUserMessage(0x00, playerID, groupIp));
+                    	srv.sendMessage(new BasicUserMessage(0x00, playerID, groupIp));
+                    	setChanged();
+                        notifyObservers();
                     }
                     catch (UnknownHostException e)
                     {
@@ -154,27 +159,15 @@ public class TriviaGame extends Observable implements Runnable
 
                 case 0x01: //Buzzer
                     freezeFlag = true;
-                    if (elapsedTime <= allowedTime)
-                    try
-                    {
-                        service.sendMessage(new BasicUserMessage(0x01, playerID, groupIp));
-                    }
-                    catch (UnknownHostException e)
-                    {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    catch (IllegalArgumentException e)
-                    {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+
+                    setChanged();
+
                     break;
 
                 case 0x02: //Buzzer Query
                     try
                     {
-                        service.sendMessage(new BuzzerQueryMessage(0x02, playerID, groupIp, elapsedTime));
+                    	srv.sendMessage(new BuzzerQueryMessage(0x02, playerID, groupIp, elapsedTime));
                     }
                     catch (UnknownHostException e)
                     {
@@ -195,7 +188,7 @@ public class TriviaGame extends Observable implements Runnable
                         setElapsedTime();
                         try
                         {
-                            service.sendMessage(new AnswerMessage(0x03, playerID, groupIp, chosenAnswerId, elapsedTime));
+                        	srv.sendMessage(new AnswerMessage(0x03, playerID, groupIp, chosenAnswerId, elapsedTime));
                         }
                         catch (UnknownHostException e)
                         {
@@ -239,16 +232,10 @@ public class TriviaGame extends Observable implements Runnable
                         if (allowedTime > 25)
                             allowedTime = 25;
                     }
-                    else if (((CorrectAnswerMessage)msg).getPlayerId() != playerID)  //Is this needed?  what if a player does not win the buzz in, does correctInRow go to 0?
-                    {
-                        correctInRow = 0;  
-                        allowedTime = allowedTime + 2;
-                        if (allowedTime > 25)
-                            allowedTime = 25;
-                    }
+                    
                     try
                     {
-                        service.sendMessage(new BasicUserMessage(0x04, playerID, groupIp));
+                    	srv.sendMessage(new BasicUserMessage(0x04, playerID, groupIp));
                     }
                     catch (UnknownHostException e)
                     {
@@ -266,10 +253,9 @@ public class TriviaGame extends Observable implements Runnable
                     setUnlockTime();
                     freezeFlag = false;
                     setChanged();
-                    notifyObservers();
                     try
                     {
-                        service.sendMessage(new BasicUserMessage(0x05, playerID, groupIp));
+                    	srv.sendMessage(new BasicUserMessage(0x05, playerID, groupIp));
                     }
                     catch (UnknownHostException e)
                     {
@@ -287,10 +273,9 @@ public class TriviaGame extends Observable implements Runnable
                     correctPlayerID = ((UserIDMessage)msg).getUserId(); //should this be AnswerMessage ????????
                     freezeFlag = true;
                     setChanged();
-                    notifyObservers();
                     try
                     {
-                        service.sendMessage(new BasicUserMessage(0x06, playerID, groupIp));
+                    	srv.sendMessage(new BasicUserMessage(0x06, playerID, groupIp));
                     }
                     catch (UnknownHostException e)
                     {
@@ -306,41 +291,27 @@ public class TriviaGame extends Observable implements Runnable
                     
                 case 0x07: //Leave Game
                     correctPlayerID = ((UserIDMessage)msg).getUserId();
-                    try
-                    {
-                        service.sendMessage(new BasicUserMessage(0x07, playerID, groupIp));
-                    }
-                    catch (UnknownHostException e)
-                    {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    catch (IllegalArgumentException e)
-                    {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
                     break;
                     
                 case 0x08: //Get Scores
                     //??? Is this a message that will list all the scores for all the players or just our own score??? only message with getPoints is CorrectAnswerMessage??????
-                    try
-                    {
-                        service.sendMessage(new BasicUserMessage(0x08, playerID, groupIp));
-                    }
-                    catch (UnknownHostException e)
-                    {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    catch (IllegalArgumentException e)
-                    {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
                     break;     
             }//switch
+        	try {
+				Thread.sleep(1);
+			} catch (InterruptedException e1) {	}
         }//while true
+        
+        notifyObservers();
     }//run
+
+	@Override
+	public void update(Observable o, Object arg) 
+	{
+		if(o instanceof ServiceInterface)
+		{
+			preformAction(((ServiceInterface)o));
+		}
+	}
 
 }//TriviaGame class

@@ -69,22 +69,12 @@ public class RegistrationSystem
     
     public boolean Ready (UUID userID) throws UnknownHostException, IllegalArgumentException
     {
-        Message msg = null;
-        service.sendMessage(new UserIDMessage(0x03, userID));
-        msg = WaitForMessage();
-        if(!((StatusMessage)msg).getSuccess())
-            errorMessage = ((StatusMessage)msg).getErrorMessage();
-        return ((StatusMessage)msg).getSuccess();
+        return service.sendMessage(new UserIDMessage(0x03, userID));
     }//Ready
     
     public boolean NotReady (UUID userID) throws UnknownHostException, IllegalArgumentException
     {
-        Message msg = null;
-        service.sendMessage(new UserIDMessage(0x04, userID));
-        msg = WaitForMessage();
-        if(!((StatusMessage)msg).getSuccess())
-            errorMessage = ((StatusMessage)msg).getErrorMessage();
-        return ((StatusMessage)msg).getSuccess();
+        return service.sendMessage(new UserIDMessage(0x04, userID));
     }//NotReady
     
     public void setPlayerID(UUID playerID)

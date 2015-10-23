@@ -59,9 +59,6 @@ public class GamePlayDisplay implements Observer  {
 	{
 		this.sys = sys;
 		sys.addObserver(this);
-		
-		sysThread = new Thread(sys);
-		sysThread.start();
 	}
 
 	//go() method for the class; creates the GUI with components, registers the components with their listeners
@@ -301,7 +298,7 @@ public class GamePlayDisplay implements Observer  {
 			/*** Added leaving game code here ***/
 			playerID = sys.getPlayerID();
 			groupIp = sys.getGroupIp();
-			sys.leaveGame(playerID, groupIp);
+			sys.leaveGame();
 
 		}//actionPerformed
 	}//quitListener
