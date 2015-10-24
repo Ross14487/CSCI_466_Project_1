@@ -28,7 +28,7 @@ public class MulticastServer
 		}
 	}
 	
-	static void main(String[] args) throws InterruptedException
+	public static void main(String[] args) throws InterruptedException
 	{
 		MulticastServer svr = new MulticastServer(4446, "203.0.113.0");
 		
