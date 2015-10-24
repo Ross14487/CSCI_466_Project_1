@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
 
+import TrivaGameClient.TimerDemoCountDown.CountDownTask;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,8 +26,7 @@ import java.util.Observer;
 import java.util.UUID;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
-
-import java.util.Scanner;
+import java.awt.Toolkit;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -185,21 +186,66 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 		panel_1.add(btnQuit);
 	}
 	
-    //Update the time shown by the countdown timer
-   ActionListener countDown = new ActionListener() {  //create the new action listener object. 
-    public void updateCountDown(ActionEvent evt){
-              if (count > 0){
-                  int newTimeRem = sys.getTimeRemaining();
-                  timer.setText("Timer: "+newTimeRem+"    "); 
-                  count--;//Decrease our count.
-              }//if
-              else
-              {
-                  disableInterface();
-              }//else
-            new Timer(delay, countDown).start();// Create the new timer.
-        }//updateCountDown
-   }
+    
+	/**
+	 * Schedule a task that executes once every second.
+	 */
+
+	public class TimerCountDown {
+	  Toolkit toolkit;
+
+	  Timer timer;
+
+	  public TimerCountDown() {
+	    toolkit = Toolkit.getDefaultToolkit();
+	    timer = new Timer();
+	    timer.scheduleAtFixedRate(new CountDownTask(), 0, //initial delay
+	        1 * 1000); //subsequent rate
+	  }
+
+	  class CountDownTask extends TimerTask {
+	    int timeLeft = sys.getAllowedTime();
+
+	    public void run() {
+	      if (timeLeft-- > 0) {
+//	        long time = System.currentTimeMillis();
+//	        if (time - scheduledExecutionTime() > 5) {
+//	          return;
+//	        }
+
+	        //If it's not too late, beep.
+	        toolkit.beep();
+	        System.out.println("Beep!");// ???? Tie to UI ????
+	      }//if timeleft 
+	      else {
+	        toolkit.beep();
+	        System.out.println("Time's up!"); // ???? Tie to UI ????
+	        timer.cancel(); 
+//	        System.exit(0); //Stops the AWT thread (and everything else)
+	      }//else
+	    }//run
+	  }//CountDownTask
+	}//TimerCountDown
+	   
+	
+	
+	
+	
+	//    //Update the time shown by the countdown timer
+//   ActionListener countDown = new ActionListener() {  //create the new action listener object. 
+//    public void updateCountDown(ActionEvent evt){
+//              if (count > 0){
+//                  int newTimeRem = sys.getTimeRemaining();
+//                  timer.setText("Timer: "+newTimeRem+"    "); 
+//                  count--;//Decrease our count.
+//              }//if
+//              else
+//              {
+//                  disableInterface();
+//              }//else
+//            new Timer(delay, countDown).start();// Create the new timer.
+//        }//updateCountDown
+//   }
 	
 	public TriviaGameDisplay(TriviaGame sys)
 	{
