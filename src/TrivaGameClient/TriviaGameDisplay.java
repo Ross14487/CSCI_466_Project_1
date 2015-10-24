@@ -1,8 +1,6 @@
 package TrivaGameClient;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -12,9 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
 
-import TrivaGameClient.TimerDemoCountDown.CountDownTask;
-
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -26,7 +21,6 @@ import java.util.Observer;
 import java.util.UUID;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
-import java.awt.Toolkit;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,7 +30,7 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	private String[] answers;
 	private UUID[] answerIds;
 	private TriviaGame sys;
-	
+	private TimerCountDown timer;
 	private static final long serialVersionUID = 1L;
 	
 	private JPanel contentPane;
@@ -45,20 +39,7 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	private JTextPane txtpnQuestionInfo;
 	private JButton btnSubmitAns;
 	private List<JRadioButton> answerSelection = new ArrayList<JRadioButton>();
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TriviaGameDisplay frame = new TriviaGameDisplay();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -192,17 +173,19 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	 */
 
 	public class TimerCountDown {
-	  Toolkit toolkit;
-
 	  Timer timer;
 
 	  public TimerCountDown() {
-	    toolkit = Toolkit.getDefaultToolkit();
 	    timer = new Timer();
 	    timer.scheduleAtFixedRate(new CountDownTask(), 0, //initial delay
 	        1 * 1000); //subsequent rate
 	  }
-
+	  
+	  public void stop()
+	  {
+		  timer.cancel();
+	  }
+	  
 	  class CountDownTask extends TimerTask {
 	    int timeLeft = sys.getAllowedTime();
 
@@ -213,14 +196,12 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 //	          return;
 //	        }
 
-	        //If it's not too late, beep.
-	        toolkit.beep();
-	        System.out.println("Beep!");// ???? Tie to UI ????
+	    	  lblTimeLeft.setText("" + timeLeft);
 	      }//if timeleft 
 	      else {
-	        toolkit.beep();
-	        System.out.println("Time's up!"); // ???? Tie to UI ????
-	        timer.cancel(); 
+	    	  lblTimeLeft.setText("Time Up!");
+	    	  disableInterface();
+	    	  timer.cancel(); 
 //	        System.exit(0); //Stops the AWT thread (and everything else)
 	      }//else
 	    }//run
@@ -257,7 +238,9 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	private void displayQuestion()
 	{
 		setAnswerText();
+		lblCatagory.setText("" + sys.getAllowedTime());
 		btnSubmitAns.setEnabled(true);
+		timer = new TimerCountDown();		
 	}
 	
 	private void quitGame()
@@ -276,8 +259,14 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 		if(selectedAnsIndex > -1)
 		{
 			disableInterface();
+			pauseTimer();
 			sys.submitAnswer(answerIds[selectedAnsIndex]);
 		}
+	}
+	
+	private void pauseTimer()
+	{
+		/*** ADD CODE TO PAUSE THE TIMER HERE ***/
 	}
 	
 	private void disableInterface()
