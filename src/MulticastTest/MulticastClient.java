@@ -17,14 +17,19 @@ public class MulticastClient
 	{
 		while(true)
 		{
-			System.out.println(new String(sct.receive()));
-			System.out.println(sct.receive());
+			byte[] msg = sct.receive();
+			if(msg != null)
+				System.out.println(new String(msg));
+			
+			msg = sct.receive();
+			if(msg != null)
+				System.out.println(sct.receive());
 		}
 	}
 	
 	public static void main(String[] args)
 	{
-		MulticastClient client = new MulticastClient(4446, "203.0.113.0");
+		MulticastClient client = new MulticastClient(4446, "225.4.5.6");
 		client.start();
 	}
 }
