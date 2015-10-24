@@ -83,6 +83,11 @@ public class ActivePlayerList
     	return true;
     }
     
+    public boolean playersLeft()
+    {
+    	return !activePlayers.isEmpty();
+    }
+    
     public void closeRegistration()
     {
         registrationIsOpen = false;
