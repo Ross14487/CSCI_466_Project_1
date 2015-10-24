@@ -54,7 +54,7 @@ public class GamePlayDisplay implements Observer  {
 	private UUID playerID;
 	private InetAddress groupIp;
 	private UUID [] answerIDs;
-	private int count = 25, delay = 1000;;
+	private int count = 25, delay = 1000;
 	
 	public GamePlayDisplay(TriviaGame sys)
 	{
@@ -218,7 +218,9 @@ public class GamePlayDisplay implements Observer  {
                 count--;//Decrease our count.
             }
             else
+            {
                 enableBuzzer(false);
+            }
  //         }
           new Timer(delay, countDown).start();// Create the new timer.
       }//updateCountDown

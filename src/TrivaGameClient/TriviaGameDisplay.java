@@ -11,6 +11,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
+
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -23,8 +25,12 @@ import java.util.UUID;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class TriviaGameDisplay extends JFrame implements Observer {
-	private int selectedAnsIndex = -1;
+	private int selectedAnsIndex = -1, count = 25, delay = 1000;;
 	private String catagory, questionText;
 	private String[] answers;
 	private UUID[] answerIds;
@@ -86,6 +92,7 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 		
 		lblTimeLeft = new JLabel("Time Left: ");
 		panel.add(lblTimeLeft, BorderLayout.CENTER);
+		
 		
 		lblCatagory = new JLabel("Category: ");
 		lblCatagory.setBounds(10, 45, 543, 14);
@@ -178,13 +185,29 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 		panel_1.add(btnQuit);
 	}
 	
+    //Update the time shown by the countdown timer
+   ActionListener countDown = new ActionListener() {  //create the new action listener object. 
+    public void updateCountDown(ActionEvent evt){
+              if (count > 0){
+                  int newTimeRem = sys.getTimeRemaining();
+                  timer.setText("Timer: "+newTimeRem+"    "); 
+                  count--;//Decrease our count.
+              }//if
+              else
+              {
+                  disableInterface();
+              }//else
+            new Timer(delay, countDown).start();// Create the new timer.
+        }//updateCountDown
+   }
+	
 	public TriviaGameDisplay(TriviaGame sys)
 	{
 		this();
 		this.sys = sys;
 		this.sys.addObserver(this);
 	}
-	
+	  
 	private void displayQuestion()
 	{
 		setAnswerText();
