@@ -1,6 +1,7 @@
 package TrivaGameClient;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class UserIDMessage implements Message 
@@ -10,7 +11,7 @@ public class UserIDMessage implements Message
 	
 	public UserIDMessage(byte[] rawMsg)
 	{
-		ByteBuffer buffer = ByteBuffer.wrap(rawMsg, 1, rawMsg.length);
+		ByteBuffer buffer = ByteBuffer.wrap(Arrays.copyOfRange(rawMsg, 1, rawMsg.length));
 		this.rawMsg = rawMsg;
 		
 		userId = new UUID(buffer.getLong(), buffer.getLong());

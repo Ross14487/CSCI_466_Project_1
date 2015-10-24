@@ -361,12 +361,13 @@ public class InitialDisplay {
 
 	private void startGame() throws UnknownHostException
 	{
+		InitialDisplay initDsply = this;
 		TriviaGame gameSystem = new TriviaGame(new TrivaGameService(serverIPStr, getGroupIp(), getPortNum(), new UDP_Sock(getPortNum(), true)), InetAddress.getByName(getGroupIp()), getPlayerId(), getPortNum());
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TriviaGameDisplay frame = new TriviaGameDisplay(gameSystem);
+					TriviaGameDisplay frame = new TriviaGameDisplay(gameSystem, initDsply);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

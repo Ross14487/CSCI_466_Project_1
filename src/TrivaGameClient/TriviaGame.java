@@ -12,7 +12,8 @@ public class TriviaGame extends Observable implements Observer
     private UUID playerID, correctPlayerID, chosenAnswerId, answerId;
     private InetAddress groupIp;
     private int portNum, buzzerTime, elapsedTime, unlockTime, startTime, timeLeft, allowedTime = 25, playerScore, correctInRow = 0;
-    private boolean freezeFlag = false;
+    private boolean freezeFlag = true;
+    private boolean buzzed = false;
     private QuestionMessage questionMsg;
 
     public TriviaGame(ServiceInterface service, InetAddress groupIp, UUID playerID, int portNum)
@@ -60,6 +61,8 @@ public class TriviaGame extends Observable implements Observer
         {
 	        try
 	        {
+	        	buzzed = true;
+	        	freezeFlag = true;
 	            service.sendMessage(new BasicUserMessage(0x01, playerID, groupIp));
 	        }
 	        catch (UnknownHostException e)
@@ -139,6 +142,15 @@ public class TriviaGame extends Observable implements Observer
     {
         return playerScore;
     }
+    
+    public void sendOutOfTimeMessage()
+    {
+    	try {
+			service.sendMessage(new BasicUserMessage(0x06, playerID, groupIp));
+		} catch (UnknownHostException | IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+    }
    
     public void preformAction(ServiceInterface srv)
     {
@@ -195,7 +207,7 @@ public class TriviaGame extends Observable implements Observer
                     
                 case 0x03: //Allow Answer
                     correctPlayerID = ((UserIDMessage)msg).getUserId();
-                    if (playerID == correctPlayerID)
+                    if (playerID.equals(correctPlayerID))
                     {
                         setElapsedTime();
                         try
@@ -216,7 +228,7 @@ public class TriviaGame extends Observable implements Observer
                     break;
                     
                 case 0x04: //Answer Correct
-                    if((((CorrectAnswerMessage)msg).getPlayerId() == playerID) && (((CorrectAnswerMessage)msg).getPoints() != 0))
+                    if((((CorrectAnswerMessage)msg).getPlayerId().equals(playerID)) && (((CorrectAnswerMessage)msg).getPoints() != 0))
                     {
                         correctInRow ++;
                         if ((correctInRow % 5) == 0)

@@ -25,17 +25,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TriviaGameDisplay extends JFrame implements Observer {
-	private int selectedAnsIndex = -1, timeforRestart = 0, timeLeft = 0;
+	private int selectedAnsIndex = -1;
 	private String catagory, questionText;
 	private String[] answers;
 	private UUID[] answerIds;
 	private TriviaGame sys;
 	private TimerCountDown timer;
+	@SuppressWarnings("unused")
+	private InitialDisplay initDsply;
 	private static final long serialVersionUID = 1L;
 	
 	private JPanel contentPane;
 	private final ButtonGroup answerGroup = new ButtonGroup();
-	private JLabel lblScore, lblTimeLeft, lblCatagory;
+	private JLabel lblScore, lblTimeLeft, lblCatagory, lblPlayerName;
 	private JTextPane txtpnQuestionInfo;
 	private JButton btnSubmitAns;
 	private List<JRadioButton> answerSelection = new ArrayList<JRadioButton>();
@@ -66,7 +68,7 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblPlayerName = new JLabel("Player: ");
+		lblPlayerName = new JLabel("Player: ");
 		panel.add(lblPlayerName, BorderLayout.WEST);
 		
 		lblScore = new JLabel("Score: ");
@@ -173,17 +175,25 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	 */
 
 	public class TimerCountDown {
+	  boolean running;
 	  Timer timer;
 
 	  public TimerCountDown() {
 	    timer = new Timer();
 	    timer.scheduleAtFixedRate(new CountDownTask(), 0, //initial delay
 	        1 * 1000); //subsequent rate
+	    running = true;
+	  }
+	  
+	  public boolean isRuning()
+	  {
+		  return running;
 	  }
 	  
 	  public void stop()
 	  {
 		  timer.cancel();
+		  running = false;
 	  }
 	  
 	  class CountDownTask extends TimerTask {
@@ -201,7 +211,8 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	      else {
 	    	  lblTimeLeft.setText("Time Up!");
 	    	  disableInterface();
-	    	  timer.cancel(); 
+	    	  sys.sendOutOfTimeMessage();
+	    	  stop();
 //	        System.exit(0); //Stops the AWT thread (and everything else)
 	      }//else
 	    }//run
@@ -209,11 +220,13 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	}//TimerCountDown
 	   
 	
-	public TriviaGameDisplay(TriviaGame sys)
+	public TriviaGameDisplay(TriviaGame sys, InitialDisplay initDsply)
 	{
 		this();
 		this.sys = sys;
 		this.sys.addObserver(this);
+		this.initDsply = initDsply;
+		lblPlayerName.setText("Player: " + initDsply.getPlayerName() + " ");		
 	}
 	  
 	private void displayQuestion()
@@ -221,7 +234,9 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 		setAnswerText();
 		lblCatagory.setText("" + sys.getAllowedTime());
 		btnSubmitAns.setEnabled(true);
-		timer = new TimerCountDown();		
+		
+		if(timer == null || !timer.isRuning())
+			timer = new TimerCountDown();		
 	}
 	
 	private void quitGame()
@@ -232,7 +247,7 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	private void closeForm()
 	{
 		quitGame();
-		this.dispose();
+		System.exit(0);
 	}
 	
 	private void submitAnswer()

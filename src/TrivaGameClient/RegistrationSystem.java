@@ -1,7 +1,6 @@
 package TrivaGameClient;
 
 
-import java.net.InetAddress;
 /******************************************************************************
  * Name        :  Ross Mitchell 
  * email       :  RPMitchell@mtech.edu

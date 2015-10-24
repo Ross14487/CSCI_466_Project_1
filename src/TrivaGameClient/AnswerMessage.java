@@ -27,6 +27,7 @@ public class AnswerMessage extends BasicUserMessage
 		this.timeElapsed = timeElapsed;
 		ByteBuffer buffer = ByteBuffer.wrap(new byte[offset+20]);
 		
+		buffer.put(rawMsg);
 		buffer.putLong(answerId.getMostSignificantBits());
 		buffer.putLong(answerId.getLeastSignificantBits());
 		buffer.putInt(timeElapsed);
