@@ -71,7 +71,7 @@ public class TrivaGame implements Observer, Runnable
 				// send the question
 				if(nextQuestion || playerList.allPlayersReady())
 				{
-					currentProblem = questions.get(index%questions.size());
+					currentProblem = questions.get(index++%questions.size());
 					nextQuestion = false;
 					playerList.clearPlayersReady();
 					msg = createQuestionPacket();
@@ -104,6 +104,7 @@ public class TrivaGame implements Observer, Runnable
 				{
 					playerList.removePlayer(((BasicUserMessage) receivedMessage.message).getPlayerId());
 					server.queueMessage(new TrivaMessage(groupIp, new UserIDMessage(0x06, ((BasicUserMessage) receivedMessage.message).getPlayerId())));
+					run = playerList.playersLeft();
 				}
 				
 				Thread.sleep(1);
@@ -142,18 +143,24 @@ public class TrivaGame implements Observer, Runnable
 		byte[] rawMsg = new byte[1];
 		rawMsg[0] = (byte)0x02;
 		
+		server.queueMessage(new TrivaMessage(groupIp, new OpcodeOnlyMessage(0x01)));
 		server.queueMessage(new TrivaMessage(groupIp, new OpcodeOnlyMessage(0x02)));
 		
-		while(maxWait > System.currentTimeMillis() || !msgQueue.isEmpty())
+		// give some time for responses to queue up
+		Thread.sleep(500);
+		
+		while((maxWait > System.currentTimeMillis() || !msgQueue.isEmpty()) && player == null)
 		{
+			maxWait = System.currentTimeMillis() + timeToWait; // reset
 			// found a response
 			if((msg = processQueuedMessage()) != null && msg.message.getOpcode() == 0x02)
 			{
-				long userTimeStamp = ((BuzzerQueryMessage) msg.message).getTimeStamp();
+				BuzzerQueryMessage qry = ((BuzzerQueryMessage)((BasicUserMessage) msg.message));
+				long userTimeStamp = qry.getTimeStamp();
 				if(userTimeStamp > timeStamp)
 				{
 					timeStamp = userTimeStamp;
-					player = ((BuzzerQueryMessage) msg.message).getPlayerId();
+					player = qry.getPlayerId();
 				}
 			}
 		}
@@ -171,18 +178,24 @@ public class TrivaGame implements Observer, Runnable
 		if(userId == null)
 			return;
 		
-		while(maxWait > System.currentTimeMillis() || !msgQueue.isEmpty())
+		server.queueMessage(new TrivaMessage(groupIp, new UserIDMessage(0x03, userId)));
+		
+		// give some time for responses to queue up
+		Thread.sleep(500);
+		
+		while((maxWait > System.currentTimeMillis()) || !msgQueue.isEmpty())
 		{
 			// found a response
 			if((msg = processQueuedMessage()) != null && msg.message.getOpcode() == 0x03)
 			{
-				answer = ((AnswerMessage) msg.message).getAnswerId();
+				AnswerMessage ansMessage = ((AnswerMessage)((BasicUserMessage) msg.message));
+				answer = ansMessage.getAnswerId();
 				
 				// check the answer
 				if(answer.equals(currentProblem.getAnswer()))
 				{
 					nextQuestion = true;	// move on to the next question
-					givePoints(timeToWait, userId, ((AnswerMessage) msg.message).getTimeElapsed());
+					givePoints(timeToWait, userId, ansMessage.getTimeElapsed());
 				}
 				else
 					givePoints(timeToWait, userId, -1);	// wrong answer
@@ -195,13 +208,13 @@ public class TrivaGame implements Observer, Runnable
 	{
 		int pointsReceived = 0;
 		if(timeElapsed <= -1); //wrong answer
-		else if(timeElapsed < 6)
+		else if(timeElapsed < 6000)
 			pointsReceived = getPointMultiplier(currentProblem.getLevel()) * 100;
-		else if(timeElapsed < 11)
+		else if(timeElapsed < 11000)
 			pointsReceived = (int) ((int) (getPointMultiplier(currentProblem.getLevel()) * 100) * 0.75);
-		else if(timeElapsed < 16)
+		else if(timeElapsed < 16000)
 			pointsReceived = (int) ((int) (getPointMultiplier(currentProblem.getLevel()) * 100) * 0.50);
-		else if(timeElapsed < 21)
+		else if(timeElapsed < 21000)
 			pointsReceived = (int) ((int) (getPointMultiplier(currentProblem.getLevel()) * 100) * 0.25);
 		else
 			pointsReceived = 1;
@@ -214,6 +227,7 @@ public class TrivaGame implements Observer, Runnable
 			server.queueMessage(new TrivaMessage(groupIp, new CorrectAnswerMessage(0x04, userId, pointsReceived)));	// try again if it failed
 		
 		playerList.clearReceived();
+		playerList.playerReady(userId, true);	// the user had their chance to answer
 	}
 	
 	private boolean confirmReceived(byte opcode, long timeToWait, UUID playerId) throws InterruptedException

@@ -30,6 +30,8 @@ public class CorrectAnswerMessage implements Message
 		buffer.putLong(playerId.getMostSignificantBits());
 		buffer.putLong(playerId.getLeastSignificantBits());
 		buffer.putInt(points);
+		
+		this.rawMsg = buffer.array();
 	}
 	
 	public UUID getPlayerId()
