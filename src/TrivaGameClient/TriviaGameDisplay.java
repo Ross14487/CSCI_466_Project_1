@@ -25,7 +25,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TriviaGameDisplay extends JFrame implements Observer {
-	private int selectedAnsIndex = -1, count = 25, delay = 1000;;
+	private int selectedAnsIndex = -1, timeforRestart = 0, timeLeft = 0;
 	private String catagory, questionText;
 	private String[] answers;
 	private UUID[] answerIds;
@@ -190,13 +190,13 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	    int timeLeft = sys.getAllowedTime();
 
 	    public void run() {
-	      if (timeLeft-- > 0) {
+	      if (timeLeft-- > 0){
 //	        long time = System.currentTimeMillis();
 //	        if (time - scheduledExecutionTime() > 5) {
 //	          return;
 //	        }
 
-	    	  lblTimeLeft.setText("" + timeLeft);
+	    	  lblTimeLeft.setText("Time Left: " + timeLeft);
 	      }//if timeleft 
 	      else {
 	    	  lblTimeLeft.setText("Time Up!");
@@ -208,25 +208,6 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	  }//CountDownTask
 	}//TimerCountDown
 	   
-	
-	
-	
-	
-	//    //Update the time shown by the countdown timer
-//   ActionListener countDown = new ActionListener() {  //create the new action listener object. 
-//    public void updateCountDown(ActionEvent evt){
-//              if (count > 0){
-//                  int newTimeRem = sys.getTimeRemaining();
-//                  timer.setText("Timer: "+newTimeRem+"    "); 
-//                  count--;//Decrease our count.
-//              }//if
-//              else
-//              {
-//                  disableInterface();
-//              }//else
-//            new Timer(delay, countDown).start();// Create the new timer.
-//        }//updateCountDown
-//   }
 	
 	public TriviaGameDisplay(TriviaGame sys)
 	{
@@ -266,7 +247,7 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	
 	private void pauseTimer()
 	{
-		/*** ADD CODE TO PAUSE THE TIMER HERE ***/
+		timer.stop();
 	}
 	
 	private void disableInterface()
