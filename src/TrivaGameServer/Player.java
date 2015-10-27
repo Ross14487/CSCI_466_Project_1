@@ -40,6 +40,11 @@ public class Player
         ready = false;
     }//constructor
     
+    public void givePoints(int points)
+    {
+    	this.score += points;
+    }
+    
     public void setReceived(boolean received)
     {
     	this.received = received;

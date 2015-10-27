@@ -22,7 +22,7 @@ public class UserScoreMessage implements Message
 	public UserScoreMessage(int opcode, int score, String userName)
 	{
 		byte[] rawErrMsg = userName.getBytes(StandardCharsets.UTF_8);
-		ByteBuffer buffer = ByteBuffer.wrap(new byte[2+rawErrMsg.length]);
+		ByteBuffer buffer = ByteBuffer.wrap(new byte[5+rawErrMsg.length]);
 		
 		buffer.put((byte)opcode);
 		buffer.putInt(score);
