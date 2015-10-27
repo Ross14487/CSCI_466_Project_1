@@ -81,6 +81,9 @@ public class TrivaGameService extends Observable implements HandableObject, Serv
 		case 0x04:
 			messageQueue.offer(new CorrectAnswerMessage(msg));
 			break;
+		case 0x08:
+			messageQueue.offer(new UserScoreMessage(msg));
+			break;
 		}
 	}
 }

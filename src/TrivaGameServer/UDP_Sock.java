@@ -206,9 +206,9 @@ public class UDP_Sock implements NetworkInterface, Runnable {
      
      protected void receive(HandableObject handler)
      {
-    	 byte[] msg = new byte[1024];
     	 while(rx && sct != null && !sct.isClosed())
     	 {
+    		 byte[] msg = new byte[1024];
     		 try 
     		 {
     			DatagramPacket msgPckt = new DatagramPacket(msg, msg.length, InetAddress.getByName("0.0.0.0"), prt);
