@@ -3,6 +3,8 @@ package TrivaGameClient;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -15,6 +17,12 @@ public class TriviaGame extends Observable implements Observer
     private boolean freezeFlag = true;
     private boolean buzzed = false;
     private QuestionMessage questionMsg;
+    private List<UserScoreMessage> players;
+    
+    public List<UserScoreMessage> getPlayers()
+    {
+    	return players;
+    }
 
     public TriviaGame(ServiceInterface service, InetAddress groupIp, UUID playerID, int portNum)
     {
@@ -23,6 +31,7 @@ public class TriviaGame extends Observable implements Observer
         this.playerID = playerID;
         this.portNum = portNum;
         this.playerScore = 0;
+        this.players = new ArrayList<UserScoreMessage>();
         
         ((TrivaGameService)service).addObserver(this);
     }//constructor
@@ -318,7 +327,12 @@ public class TriviaGame extends Observable implements Observer
                     break;
                     
                 case 0x08: //Get Scores
-                    //??? Is this a message that will list all the scores for all the players or just our own score??? only message with getPoints is CorrectAnswerMessage??????
+                	UserScoreMessage player = ((UserScoreMessage) msg);
+                	
+                	if(players.contains(player))
+                		players.remove(player);
+
+                	players.add(player);
                     break;     
             }//switch
         	try {

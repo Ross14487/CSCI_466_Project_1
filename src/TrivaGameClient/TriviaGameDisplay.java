@@ -38,7 +38,7 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 	private JPanel contentPane;
 	private final ButtonGroup answerGroup = new ButtonGroup();
 	private JLabel lblScore, lblTimeLeft, lblCatagory, lblPlayerName;
-	private JTextPane txtpnQuestionInfo;
+	private JTextPane txtpnQuestionInfo, playerPane;
 	private JButton btnSubmitAns;
 	private List<JRadioButton> answerSelection = new ArrayList<JRadioButton>();
 	
@@ -57,7 +57,7 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 		setResizable(false);
 		setTitle("Trivia Game");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 569, 380);
+		setBounds(100, 100, 711, 380);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -167,6 +167,15 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 		JButton btnQuit = new JButton("Quit");
 		btnQuit.setBounds(401, 0, 142, 30);
 		panel_1.add(btnQuit);
+		
+		playerPane = new JTextPane();
+		playerPane.setEditable(false);
+		playerPane.setBounds(563, 45, 132, 295);
+		contentPane.add(playerPane);
+		
+		JLabel lblPlayers = new JLabel("Players:");
+		lblPlayers.setBounds(563, 20, 46, 14);
+		contentPane.add(lblPlayers);
 	}
 	
     
@@ -300,6 +309,13 @@ public class TriviaGameDisplay extends JFrame implements Observer {
 		    	displayQuestion();
 		    else
 		    	disableInterface();
+		    
+		    String players = "";
+		    
+		    for(UserScoreMessage player : sys.getPlayers())
+		    	players += (player.getString() + "\n");
+		    
+		    playerPane.setText(players);
 
 		    lblScore.setText("Score: " + gameSystem.getScore());
 		}

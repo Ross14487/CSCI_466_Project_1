@@ -29,6 +29,8 @@ public class StatusMessage implements Message
 		
 		this.success = success;
 		this.errMsg = errorMsg;
+		
+		this.rawMsg = buffer.array();
 	}
 
 	@Override

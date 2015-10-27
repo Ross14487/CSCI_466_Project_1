@@ -47,6 +47,11 @@ public class ActivePlayerList
     	return new ActivePlayerList(this);	
     }
     
+    public List<Player> getListOfPlayers()
+    {
+    	return activePlayers;
+    }
+    
     public void clearList()
     {
     	gamePort = 0;

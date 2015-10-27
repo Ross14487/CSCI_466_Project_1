@@ -13,6 +13,7 @@ import TrivaGameClient.Message;
 import TrivaGameClient.OpcodeOnlyMessage;
 import TrivaGameClient.QuestionMessage;
 import TrivaGameClient.UserIDMessage;
+import TrivaGameClient.UserScoreMessage;
 import TrivaGameClient.AnswerMessage;
 import TrivaGameClient.BasicUserMessage;
 import TrivaGameClient.BuzzerQueryMessage;
@@ -68,6 +69,10 @@ public class TrivaGame implements Observer, Runnable
 			// sleep for a sec
 			try 
 			{
+				// send out user scores
+				for(Player player : playerList.getListOfPlayers())
+					server.queueMessage(new TrivaMessage(groupIp, new UserScoreMessage(8, player.getScore(), player.getName())));
+				
 				// send the question
 				if(nextQuestion || playerList.allPlayersReady())
 				{
