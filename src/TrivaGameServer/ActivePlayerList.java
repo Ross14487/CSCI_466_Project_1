@@ -42,6 +42,11 @@ public class ActivePlayerList
     	this.timedOutPlayers.addAll(playerList.timedOutPlayers);
     }
     
+    public void givePoints(UUID user, int points)
+    {
+    	findPlayer(user).givePoints(points);
+    }
+    
     public ActivePlayerList clone()
     {
     	return new ActivePlayerList(this);	

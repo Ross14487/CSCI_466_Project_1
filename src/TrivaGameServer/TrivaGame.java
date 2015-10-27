@@ -68,14 +68,14 @@ public class TrivaGame implements Observer, Runnable
 			playerList.clearReceived();
 			// sleep for a sec
 			try 
-			{
-				// send out user scores
-				for(Player player : playerList.getListOfPlayers())
-					server.queueMessage(new TrivaMessage(groupIp, new UserScoreMessage(8, player.getScore(), player.getName())));
-				
+			{				
 				// send the question
 				if(nextQuestion || playerList.allPlayersReady())
 				{
+					// send out user scores
+					for(Player player : playerList.getListOfPlayers())
+						server.queueMessage(new TrivaMessage(groupIp, new UserScoreMessage(8, player.getScore(), player.getName())));
+					
 					currentProblem = questions.get(index++%questions.size());
 					nextQuestion = false;
 					playerList.clearPlayersReady();
@@ -223,6 +223,8 @@ public class TrivaGame implements Observer, Runnable
 			pointsReceived = (int) ((int) (getPointMultiplier(currentProblem.getLevel()) * 100) * 0.25);
 		else
 			pointsReceived = 1;
+		
+		playerList.givePoints(userId, pointsReceived);
 		
 		server.queueMessage(new TrivaMessage(groupIp, new CorrectAnswerMessage(0x04, userId, pointsReceived)));
 		playerList.clearReceived();
