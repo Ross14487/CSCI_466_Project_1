@@ -66,7 +66,7 @@ public class TriviaGame extends Observable implements Observer
     public void submitAnswer(UUID answerID)
     {
         setBuzzerTime();
-        if (buzzerTime <= allowedTime)
+        if (true)
         {
 	        try
 	        {
@@ -221,6 +221,8 @@ public class TriviaGame extends Observable implements Observer
                         setElapsedTime();
                         try
                         {
+                        	AnswerMessage k = new AnswerMessage(0x03, playerID, groupIp, chosenAnswerId, elapsedTime);
+                        	AnswerMessage j = new AnswerMessage(k.getMessage());
                         	srv.sendMessage(new AnswerMessage(0x03, playerID, groupIp, chosenAnswerId, elapsedTime));
                         }
                         catch (UnknownHostException e)
